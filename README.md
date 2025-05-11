@@ -29,8 +29,8 @@ TIU PageXpress is a web application designed to help students of Techno India Un
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/NabarupDev/frontpage-generator.git
-   cd frontpage-generator
+   git clone https://github.com/NabarupDev/TIU-PageXpress-Dev.git
+   cd TIU-PageXpress-Dev
    ```
 
 2. Install the dependencies:
