@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
+import technoIndiaLogo from "../../assets/techno-india-logo.png";
 
 const Template3 = ({ data }) => {
     const theme = useTheme();
@@ -34,7 +35,7 @@ const Template3 = ({ data }) => {
             {/* University Logo */}
             <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <img
-                    src="https://raw.githubusercontent.com/random-derv/images/refs/heads/main/techno-india-logo.png"
+                    src={technoIndiaLogo}
                     alt="University Logo"
                     style={{ height: "80px" }}
                 />

@@ -10,6 +10,8 @@ const Footer = () => {
         }
     };
 
+    const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || "nabaruproy.dev@gmail.com";
+
     return (
         <Box
             id="footer-section"
@@ -37,8 +39,8 @@ const Footer = () => {
                     sx={{ fontSize: "14px", mt: 2 }}
                 >
                     If you're facing any issues, feel free to reach out to us via email at{" "}
-                    <Link href="mailto:nabaruproy.dev@gmail.com" sx={{ color: "gray", fontWeight: 500 }}>
-                        nabaruproy.dev@gmail.com
+                    <Link href={`mailto:${contactEmail}`} sx={{ color: "gray", fontWeight: 500 }}>
+                        {contactEmail}
                     </Link>
                 </Typography>
 

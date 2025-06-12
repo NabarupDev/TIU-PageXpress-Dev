@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Typography, Grid, Table, TableBody, TableCell, TableRow, useMediaQuery, useTheme } from "@mui/material";
+import technoIndiaLogo from "../../assets/techno-india-logo.png";
 
 const Template1 = ({ data }) => {
   const theme = useTheme();
@@ -28,7 +29,7 @@ const Template1 = ({ data }) => {
           {/* Logo on the Left */}
           <Grid item>
             <img
-              src="https://raw.githubusercontent.com/random-derv/images/refs/heads/main/techno-india-logo.png"
+              src={technoIndiaLogo}
               alt="Logo"
               style={{ height: "50px" }}
             />

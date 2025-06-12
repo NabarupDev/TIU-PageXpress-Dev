@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AppBar, Toolbar, Box, Typography, IconButton, Drawer, List, ListItem, ListItemText, useMediaQuery } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import pagexpressLogo from "../assets/pagexpress-logo.png";
 
 const HomeNavbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -33,11 +34,11 @@ const HomeNavbar = () => {
       }}
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        
+
         {/* Logo */}
         <Box>
           <img
-            src="https://raw.githubusercontent.com/random-derv/images/refs/heads/main/pagexpress-logo.png"
+            src={pagexpressLogo}
             alt="TIU Logo"
             loading="lazy"
             style={{ width: isMobile ? "40px" : "50px", height: isMobile ? "40px" : "50px", cursor: "pointer" }}

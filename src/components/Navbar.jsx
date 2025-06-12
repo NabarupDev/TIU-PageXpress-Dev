@@ -1,15 +1,16 @@
-import React, { useState } from "react"; 
-import { AppBar, Toolbar, Button, Box, IconButton, Drawer } from "@mui/material"; 
-import { useNavigate } from "react-router-dom"; 
+import React, { useState } from "react";
+import { AppBar, Toolbar, Button, Box, IconButton, Drawer } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import MenuIcon from '@mui/icons-material/Menu'; // Import Menu Icon
+import pagexpressLogo from "../assets/pagexpress-logo.png";
 
-const Navbar = () => { 
-  const navigate = useNavigate(); 
+const Navbar = () => {
+  const navigate = useNavigate();
   const [openDrawer, setOpenDrawer] = useState(false);
 
   // Toggle Drawer
-  const toggleDrawer = () => { 
-    setOpenDrawer(!openDrawer); 
+  const toggleDrawer = () => {
+    setOpenDrawer(!openDrawer);
   };
 
   // Drawer menu items
@@ -37,24 +38,24 @@ const Navbar = () => {
   );
 
   return (
-    <AppBar position="static" sx={{ bgcolor: "white", boxShadow: 1, px: 3 }}>
+    <AppBar position="sticky" sx={{ bgcolor: "white", boxShadow: 1, px: 3 }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         {/* Logo */}
         <Box
           component="img"
-          src="https://raw.githubusercontent.com/random-derv/images/refs/heads/main/pagexpress-logo.png"
+          src={pagexpressLogo}
           alt="Techno India Logo"
           sx={{ height: 40, cursor: "pointer" }}
           onClick={() => navigate("/")}
         />
 
         {/* Menu Icon for Mobile */}
-        <IconButton 
-          edge="start" 
-          sx={{ 
+        <IconButton
+          edge="start"
+          sx={{
             display: { xs: 'block', md: 'none' },  // Show only on mobile
             color: 'black'  // Set the icon color to black
-          }}  
+          }}
           onClick={toggleDrawer}
         >
           <MenuIcon sx={{ color: 'black' }} />  {/* Set the MenuIcon color to black */}

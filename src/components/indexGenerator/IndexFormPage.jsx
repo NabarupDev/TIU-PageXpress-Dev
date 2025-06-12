@@ -67,8 +67,8 @@ const IndexFormPage = ({ onSubmit, initialData = [] }) => {
       updatedData[index][field] = value;
       setFormData(updatedData);
   
-      // Store the updated form data in localStorage
-      localStorage.setItem('formData', JSON.stringify(updatedData));
+      // Store the updated form data in sessionStorage
+      sessionStorage.setItem('formData', JSON.stringify(updatedData));
     }
   
     // For 'submissionDate' or 'assignmentDate', limit the input to 10 characters (DD-MM-YYYY format).
@@ -80,8 +80,8 @@ const IndexFormPage = ({ onSubmit, initialData = [] }) => {
         updatedData[index][field] = value;
         setFormData(updatedData);
   
-        // Store the updated form data in localStorage
-        localStorage.setItem('formData', JSON.stringify(updatedData));
+        // Store the updated form data in sessionStorage
+        sessionStorage.setItem('formData', JSON.stringify(updatedData));
       }
     }
   };
@@ -92,8 +92,8 @@ const IndexFormPage = ({ onSubmit, initialData = [] }) => {
       const updatedData = [...formData, { assignmentDescription: '', assignmentDate: '', submissionDate: '', slNo: formData.length + 1 }];
       setFormData(updatedData);
 
-      // Store the updated form data in localStorage
-      localStorage.setItem('formData', JSON.stringify(updatedData));
+      // Store the updated form data in sessionStorage
+      sessionStorage.setItem('formData', JSON.stringify(updatedData));
     }
   };
 
@@ -102,8 +102,8 @@ const IndexFormPage = ({ onSubmit, initialData = [] }) => {
     updatedData.forEach((item, i) => (item.slNo = i + 1)); // Reassign serial numbers
     setFormData(updatedData);
 
-    // Store the updated form data in localStorage
-    localStorage.setItem('formData', JSON.stringify(updatedData));
+    // Store the updated form data in sessionStorage
+    sessionStorage.setItem('formData', JSON.stringify(updatedData));
   };
 
   const handleSubmit = (e) => {
@@ -111,14 +111,14 @@ const IndexFormPage = ({ onSubmit, initialData = [] }) => {
     if (validateForm()) {
       onSubmit(formData);
 
-      // Store the form data in localStorage when the form is submitted
-      localStorage.setItem('formData', JSON.stringify(formData));
+      // Store the form data in sessionStorage when the form is submitted
+      sessionStorage.setItem('formData', JSON.stringify(formData));
     }
   };
 
-  // Retrieve the saved form data from localStorage when the component mounts
+  // Retrieve the saved form data from sessionStorage when the component mounts
   React.useEffect(() => {
-    const savedData = localStorage.getItem('formData');
+    const savedData = sessionStorage.getItem('formData');
     if (savedData) {
       setFormData(JSON.parse(savedData));
     }

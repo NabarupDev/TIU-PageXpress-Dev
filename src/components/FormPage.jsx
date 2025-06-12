@@ -12,6 +12,7 @@ import {
   Select,
   InputLabel,
   FormControl,
+  Autocomplete,
 } from "@mui/material";
 
 const FormPage = () => {
@@ -45,23 +46,83 @@ const FormPage = () => {
   const semesterOptions = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"];
 
   const streamOptions = [
+    // B.Tech Programs
     "B.TECH BT",
     "B.TECH CE",
     "B.TECH CSE",
     "B.TECH CSE-AI",
+    "B.TECH CSE-DS",
     "B.TECH ECE",
     "B.TECH EE",
     "B.TECH CSBS",
     "B.TECH IT",
     "B.TECH ME",
+    "B.TECH AIML",
+    "B.TECH IOT",
+    "B.TECH CYBER SECURITY",
+    
+    // Architecture & Design
     "B.ARCH",
+    "B.DES",
+    
+    // Pharmacy
     "B.PHARM",
+    "D.PHARM",
+    "M.PHARM",
+    
+    // Commerce & Management
     "B.COM",
+    "B.COM HONOURS",
+    "BBA",
+    "MBA",
+    "PGDM",
+    
+    // Arts & Humanities
     "B.A ENGLISH",
     "B.A PSYCHOLOGY",
+    "B.A JOURNALISM",
+    "BA LLB",
+    "BBA LLB",
+    "LLB",
+    "LLM",
+    
+    // Science Programs
     "B.SC BIOTECHNOLOGY",
     "B.SC DATA SCIENCE",
     "B.SC MICROBIOLOGY",
+    "B.SC CHEMISTRY",
+    "B.SC PHYSICS",
+    "B.SC MATHEMATICS",
+    "B.SC FORENSIC SCIENCE",
+    "B.SC FOOD TECHNOLOGY",
+    "B.SC AGRICULTURE",
+    "B.SC ANIMATION & VFX",
+    
+    // Computer Applications
+    "BCA",
+    "MCA",
+    
+    // Postgraduate Programs
+    "M.TECH CSE",
+    "M.TECH ECE",
+    "M.TECH ME",
+    "M.SC IT",
+    "M.SC BIOTECHNOLOGY",
+    "M.SC MICROBIOLOGY",
+    "M.SC DATA SCIENCE",
+    
+    // Diploma Programs
+    "DIPLOMA CSE",
+    "DIPLOMA ECE",
+    "DIPLOMA ME",
+    "DIPLOMA CE",
+    "DIPLOMA EE",
+    
+    // Others
+    "B.ED",
+    "M.ED",
+    "BJMC",
+    "MJMC",
   ];
   
   const yearOptions = ["1st", "2nd", "3rd", "4th", "5th"];
@@ -129,23 +190,32 @@ const FormPage = () => {
                 />
               </Grid>
               <Grid item xs={12} md={6}>
-                <FormControl fullWidth variant="outlined">
-                  <InputLabel>Stream</InputLabel>
-                  <Select
-                    label="Stream"
-                    name="stream"
-                    value={formData.stream}
-                    placeholder="Select Stream"
-                    onChange={handleChange}
-                    required
-                  >
-                    {streamOptions.map((option) => (
-                      <MenuItem key={option} value={option}>
-                        {option}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                <Autocomplete
+                  fullWidth
+                  options={streamOptions}
+                  value={formData.stream}
+                  onChange={(event, newValue) => {
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      stream: newValue || "",
+                    }));
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Stream"
+                      placeholder="Search or select stream"
+                      variant="outlined"
+                      required
+                    />
+                  )}
+                  isOptionEqualToValue={(option, value) => option === value}
+                  filterOptions={(options, { inputValue }) =>
+                    options.filter((option) =>
+                      option.toLowerCase().includes(inputValue.toLowerCase())
+                    )
+                  }
+                />
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField

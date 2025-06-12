@@ -11,6 +11,9 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Add smooth scrolling behavior */
+  scroll-behavior: smooth;
 }
 
 a {
@@ -52,6 +55,16 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Ensure smooth scrolling for html element as well */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Add smooth scrolling for all scrollable elements */
+* {
+  scroll-behavior: smooth;
 }
 
 @media (prefers-color-scheme: light) {

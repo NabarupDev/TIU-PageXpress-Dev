@@ -1,6 +1,7 @@
 import { Box, Container, Typography, Grid, Link, IconButton } from "@mui/material";
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import pagexpressLogo from "../assets/pagexpress-logo.png";
 
 const Footer = () => {
   const scrollToSection = (id) => {
@@ -9,6 +10,8 @@ const Footer = () => {
       section.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || "nabaruproy.dev@gmail.com";
 
   return (
     <Box
@@ -21,7 +24,7 @@ const Footer = () => {
           {/* Logo Section */}
           <Grid item xs={12} sm="auto">
             <img
-              src="https://raw.githubusercontent.com/random-derv/images/refs/heads/main/pagexpress-logo.png"
+              src={pagexpressLogo}
               alt="TIU Logo"
               loading="lazy"
               width={50}
@@ -86,8 +89,8 @@ const Footer = () => {
           sx={{ fontSize: "14px", mt: 2 }}
         >
           If you're facing any issues, feel free to reach out to us via email at{" "}
-          <Link href="mailto:nabaruproy.dev@gmail.com" sx={{ color: "gray", fontWeight: 500 }}>
-            nabaruproy.dev@gmail.com
+          <Link href={`mailto:${contactEmail}`} sx={{ color: "gray", fontWeight: 500 }}>
+            {contactEmail}
           </Link>
         </Typography>
 

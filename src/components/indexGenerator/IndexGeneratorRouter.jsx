@@ -17,6 +17,7 @@ import WhyUseThis from "../WhyUseThis";
 import Instructions from '../Instructions';
 import Footer from '../Footer';
 import GenFotter from '../GenFooter';
+import ScrollToTop from '../ScrollToTop';
 
 const IndexGeneratorRouter = () => {
   const [formData, setFormData] = useState({
@@ -41,7 +42,7 @@ const IndexGeneratorRouter = () => {
 
   return (
     <>
-
+      <ScrollToTop />
       <Box>
         <Routes>
           <Route path="/" element={

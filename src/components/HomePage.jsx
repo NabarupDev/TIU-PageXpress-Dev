@@ -1,5 +1,6 @@
 import { Box, Button, Typography, useMediaQuery, keyframes } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import pagexpressLogo from "../assets/pagexpress-logo.png";
 
 // Define bounce animation
 const bounce = keyframes`
@@ -34,7 +35,7 @@ const HomePage = () => {
     >
       {/* Responsive Logo */}
       <img
-        src="https://raw.githubusercontent.com/random-derv/images/refs/heads/main/pagexpress-logo.png"
+        src={pagexpressLogo}
         alt="TIU Logo"
         style={{
           width: isSmallScreen ? "80px" : isMediumScreen ? "100px" : "130px",
