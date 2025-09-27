@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
@@ -25,9 +25,17 @@ const FormPage = () => {
     studentId: "",
     semester: "",
     subject: "",
-    institution: "",
+    institution: "Techno India University",
     year: "", // Added year property
   });
+
+  useEffect(() => {
+    const storedData = localStorage.getItem("projectData");
+    if (storedData) {
+      const parsedData = JSON.parse(storedData);
+      setFormData((prev) => ({ ...prev, ...parsedData }));
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -39,7 +47,16 @@ const FormPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    localStorage.setItem("projectData", JSON.stringify(formData));
+    const dataToStore = {
+      name: formData.name,
+      studentId: formData.studentId,
+      stream: formData.stream,
+      section: formData.section,
+      group: formData.group,
+      semester: formData.semester,
+      year: formData.year,
+    };
+    localStorage.setItem("projectData", JSON.stringify(dataToStore));
     navigate("/templates");
   };
 

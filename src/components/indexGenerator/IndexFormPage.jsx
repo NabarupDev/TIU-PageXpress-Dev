@@ -8,6 +8,8 @@ import {
   Box, 
   Container 
 } from '@mui/material';
+import jsPDF from 'jspdf';
+import defaultIndex from '../../assets/default_index.jpg';
 
 const IndexFormPage = ({ onSubmit, initialData = [] }) => {
   const [formData, setFormData] = useState(initialData.length > 0 ? initialData : [
@@ -124,6 +126,44 @@ const IndexFormPage = ({ onSubmit, initialData = [] }) => {
     }
   }, []);
 
+  const downloadJPG = () => {
+    const link = document.createElement('a');
+    link.href = defaultIndex;
+    link.download = 'blank_index.jpg';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const downloadImage = (format) => {
+    const img = new Image();
+    img.src = defaultIndex;
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+      if (format === 'png') {
+        canvas.toBlob((blob) => {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'blank_index.png';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        }, 'image/png');
+      } else if (format === 'pdf') {
+        const pdf = new jsPDF();
+        const imgData = canvas.toDataURL('image/jpeg');
+        pdf.addImage(imgData, 'JPEG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
+        pdf.save('blank_index.pdf');
+      }
+    };
+  };
+
   return (
     <Container maxWidth="md">
       <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
@@ -134,6 +174,13 @@ const IndexFormPage = ({ onSubmit, initialData = [] }) => {
         <Typography variant="body1" sx={{ mb: 3, textAlign: 'center' }}>
           Fill in your project details to generate a professional index page.
         </Typography>
+
+        <Box sx={{ textAlign: 'center', mb: 3 }}>
+          <Typography variant="h6" sx={{ mb: 2 }}>Or download a blank index page:</Typography>
+          <Button variant="outlined" onClick={downloadJPG} sx={{ mr: 1 }}>JPG</Button>
+          <Button variant="outlined" onClick={() => downloadImage('png')} sx={{ mr: 1 }}>PNG</Button>
+          <Button variant="outlined" onClick={() => downloadImage('pdf')}>PDF</Button>
+        </Box>
 
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
           {formData.map((entry, index) => (
