@@ -32,6 +32,26 @@ const PreviewPage = () => {
   const open = Boolean(anchorEl);
   const menuId = 'save-options-menu';
 
+  // API Ninjas Counter configuration
+  const API_NINJAS_KEY = import.meta.env.VITE_API_NINJAS_KEY;
+  const API_NINJAS_BASE_URL = 'https://api.api-ninjas.com/v1/counter';
+  const COUNTER_ID = import.meta.env.VITE_COUNTER_ID;
+
+  // Increment download count
+  const incrementDownloadCount = async () => {
+    try {
+      await fetch(`${API_NINJAS_BASE_URL}?id=${COUNTER_ID}&hit=true`, {
+        method: 'GET',
+        headers: {
+          'X-Api-Key': API_NINJAS_KEY
+        }
+      });
+    } catch (error) {
+      // Silently fail - don't block the download
+      // console.warn('Could not update download counter:', error.message);
+    }
+  };
+
   if (!projectData.name || !selectedTemplate) {
     navigate(!projectData.name ? '/' : '/templates');
     return null;
@@ -61,8 +81,10 @@ const PreviewPage = () => {
 
       pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
       pdf.save('front_page.pdf');
+      // Increment download counter
+      await incrementDownloadCount();
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      // console.error('Error generating PDF:', error);
       alert('Error generating PDF. Please try again.');
     } finally {
       setIsGenerating(false);
@@ -81,9 +103,11 @@ const PreviewPage = () => {
       link.href = imageData;
       link.download = `front_page.${format}`;
       link.click();
+      // Increment download counter
+      await incrementDownloadCount();
     } catch (error) {
-      console.error(`Error saving ${format}:`, error);
-      alert(`Error saving as ${format}. Please try again.`);
+      // console.error(`Error saving ${format}:`, error);
+      // alert(`Error saving as ${format}. Please try again.`);
     } finally {
       setIsGenerating(false);
     }
@@ -166,6 +190,11 @@ const PreviewPage = () => {
                 vertical: 'top',
                 horizontal: 'center',
               }}
+              MenuListProps={{
+                'aria-labelledby': 'save-options-menu',
+                autoFocusItem: false,
+              }}
+              disableAutoFocusItem
             >
               <MenuItem onClick={generatePDF}>Save as PDF</MenuItem>
               <MenuItem onClick={() => downloadImage('png')}>Save as PNG</MenuItem>

@@ -8,19 +8,51 @@ import {
   Box, 
   Container 
 } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 import jsPDF from 'jspdf';
-import defaultIndex from '../../assets/default_index.jpg';
-
-const IndexFormPage = ({ onSubmit, initialData = [] }) => {
-  const [formData, setFormData] = useState(initialData.length > 0 ? initialData : [
-    { assignmentDescription: '', assignmentDate: '', submissionDate: '', slNo: 1 }
-  ]);
+import defaultIndex from '../../assets/default_index.jpg';const IndexFormPage = ({ onSubmit, initialData = [] }) => {
+  const [formData, setFormData] = useState(() => {
+    if (initialData.length > 0) {
+      // Convert any string dates to dayjs objects
+      return initialData.map(item => ({
+        ...item,
+        assignmentDate: item.assignmentDate ? dayjs(item.assignmentDate) : null,
+        submissionDate: item.submissionDate ? dayjs(item.submissionDate) : null
+      }));
+    }
+    return [{ assignmentDescription: '', assignmentDate: null, submissionDate: null, slNo: 1 }];
+  });
 
   const [errors, setErrors] = useState([]);
 
+  // Date constraints
+  const maxDate = dayjs().add(1, 'year');
+
+  // API Ninjas Counter configuration
+  const API_NINJAS_KEY = import.meta.env.VITE_API_NINJAS_KEY;
+  const API_NINJAS_BASE_URL = 'https://api.api-ninjas.com/v1/counter';
+  const COUNTER_ID = import.meta.env.VITE_COUNTER_ID;
+
+  // Increment download count
+  const incrementDownloadCount = async () => {
+    try {
+      await fetch(`${API_NINJAS_BASE_URL}?id=${COUNTER_ID}&hit=true`, {
+        method: 'GET',
+        headers: {
+          'X-Api-Key': API_NINJAS_KEY
+        }
+      });
+    } catch (error) {
+      // Silently fail - don't block the download
+      // console.warn('Could not update download counter:', error.message);
+    }
+  };
+
   const validateDate = (dateString) => {
-    const regex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/;
-    return regex.test(dateString);
+    return dayjs(dateString).isValid();
   };
 
   const validateForm = () => {
@@ -28,16 +60,12 @@ const IndexFormPage = ({ onSubmit, initialData = [] }) => {
       let error = {};
 
       if (!entry.assignmentDescription.trim()) error.assignmentDescription = 'Assignment description is required';
-      if (!entry.assignmentDate.trim()) {
+      if (!entry.assignmentDate) {
         error.assignmentDate = 'Assignment date is required';
-      } else if (!validateDate(entry.assignmentDate)) {
-        error.assignmentDate = 'Date must be in DD-MM-YYYY format';
       }
       
-      if (!entry.submissionDate.trim()) {
+      if (!entry.submissionDate) {
         error.submissionDate = 'Submission date is required';
-      } else if (!validateDate(entry.submissionDate)) {
-        error.submissionDate = 'Date must be in DD-MM-YYYY format';
       }
 
       return error;
@@ -45,21 +73,9 @@ const IndexFormPage = ({ onSubmit, initialData = [] }) => {
 
     setErrors(newErrors);
     return newErrors.every(err => Object.keys(err).length === 0);
-  };
-
-  const formatDateInput = (value) => {
-    // Remove any non-digit or non-hyphen characters
-    let formattedValue = value.replace(/[^0-9]/g, '');
-
-    // Automatically add hyphens in the correct places if the input is at the correct length
-    if (formattedValue.length > 2 && formattedValue.length <= 4) {
-      formattedValue = formattedValue.replace(/(\d{2})(\d{1,2})/, '$1-$2');
-    } else if (formattedValue.length > 4) {
-      formattedValue = formattedValue.replace(/(\d{2})(\d{2})(\d{1,4})/, '$1-$2-$3');
-    }
-
-    // Limit to 10 characters (DD-MM-YYYY format: 8 digits + 2 hyphens)
-    return formattedValue.slice(0, 10);
+  };  const formatDateInput = (value) => {
+    // This function is no longer needed with date pickers
+    return value;
   };
 
   const handleChange = (index, field, value) => {
@@ -68,34 +84,40 @@ const IndexFormPage = ({ onSubmit, initialData = [] }) => {
       const updatedData = [...formData];
       updatedData[index][field] = value;
       setFormData(updatedData);
-  
+
       // Store the updated form data in sessionStorage
       sessionStorage.setItem('formData', JSON.stringify(updatedData));
     }
-  
-    // For 'submissionDate' or 'assignmentDate', limit the input to 10 characters (DD-MM-YYYY format).
+
+    // For date fields, handle dayjs objects
     if (field === 'submissionDate' || field === 'assignmentDate') {
-      if (value.length <= 10) {
-        value = formatDateInput(value); // Apply the date formatting
-  
-        const updatedData = [...formData];
-        updatedData[index][field] = value;
-        setFormData(updatedData);
-  
-        // Store the updated form data in sessionStorage
-        sessionStorage.setItem('formData', JSON.stringify(updatedData));
-      }
+      const updatedData = [...formData];
+      updatedData[index][field] = value;
+      setFormData(updatedData);
+
+      // Store the updated form data in sessionStorage (convert dates to ISO strings)
+      const dataToStore = updatedData.map(item => ({
+        ...item,
+        assignmentDate: item.assignmentDate ? dayjs(item.assignmentDate).toISOString() : null,
+        submissionDate: item.submissionDate ? dayjs(item.submissionDate).toISOString() : null
+      }));
+      sessionStorage.setItem('formData', JSON.stringify(dataToStore));
     }
   };
-  
+
 
   const handleAddRow = () => {
     if (formData.length < 10) {
-      const updatedData = [...formData, { assignmentDescription: '', assignmentDate: '', submissionDate: '', slNo: formData.length + 1 }];
+      const updatedData = [...formData, { assignmentDescription: '', assignmentDate: null, submissionDate: null, slNo: formData.length + 1 }];
       setFormData(updatedData);
 
       // Store the updated form data in sessionStorage
-      sessionStorage.setItem('formData', JSON.stringify(updatedData));
+      const dataToStore = updatedData.map(item => ({
+        ...item,
+        assignmentDate: item.assignmentDate ? dayjs(item.assignmentDate).toISOString() : null,
+        submissionDate: item.submissionDate ? dayjs(item.submissionDate).toISOString() : null
+      }));
+      sessionStorage.setItem('formData', JSON.stringify(dataToStore));
     }
   };
 
@@ -105,47 +127,76 @@ const IndexFormPage = ({ onSubmit, initialData = [] }) => {
     setFormData(updatedData);
 
     // Store the updated form data in sessionStorage
-    sessionStorage.setItem('formData', JSON.stringify(updatedData));
+    const dataToStore = updatedData.map(item => ({
+      ...item,
+      assignmentDate: item.assignmentDate ? dayjs(item.assignmentDate).toISOString() : null,
+      submissionDate: item.submissionDate ? dayjs(item.submissionDate).toISOString() : null
+    }));
+    sessionStorage.setItem('formData', JSON.stringify(dataToStore));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      onSubmit(formData);
+      // Convert dates to DD-MM-YYYY format for submission
+      const formattedData = formData.map(item => ({
+        ...item,
+        assignmentDate: item.assignmentDate ? dayjs(item.assignmentDate).format('DD-MM-YYYY') : '',
+        submissionDate: item.submissionDate ? dayjs(item.submissionDate).format('DD-MM-YYYY') : ''
+      }));
+      onSubmit(formattedData);
 
       // Store the form data in sessionStorage when the form is submitted
-      sessionStorage.setItem('formData', JSON.stringify(formData));
+      const dataToStore = formData.map(item => ({
+        ...item,
+        assignmentDate: item.assignmentDate ? dayjs(item.assignmentDate).toISOString() : null,
+        submissionDate: item.submissionDate ? dayjs(item.submissionDate).toISOString() : null
+      }));
+      sessionStorage.setItem('formData', JSON.stringify(dataToStore));
     }
   };
 
   // Retrieve the saved form data from sessionStorage when the component mounts
   React.useEffect(() => {
-    const savedData = sessionStorage.getItem('formData');
-    if (savedData) {
-      setFormData(JSON.parse(savedData));
+    // Only restore if initialData is empty (to avoid conflicts)
+    if (initialData.length === 0) {
+      const savedData = sessionStorage.getItem('formData');
+      if (savedData) {
+        const parsedData = JSON.parse(savedData);
+        // Convert ISO strings back to dayjs objects
+        const restoredData = parsedData.map(item => ({
+          ...item,
+          assignmentDate: item.assignmentDate ? dayjs(item.assignmentDate) : null,
+          submissionDate: item.submissionDate ? dayjs(item.submissionDate) : null
+        }));
+        setFormData(restoredData);
+      }
     }
-  }, []);
+  }, [initialData]);
 
-  const downloadJPG = () => {
+  const downloadJPG = async () => {
     const link = document.createElement('a');
     link.href = defaultIndex;
     link.download = 'blank_index.jpg';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+
+    // Increment download counter
+    await incrementDownloadCount();
   };
 
-  const downloadImage = (format) => {
+  const downloadImage = async (format) => {
     const img = new Image();
     img.src = defaultIndex;
-    img.onload = () => {
+    img.onload = async () => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       canvas.width = img.width;
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
       if (format === 'png') {
-        canvas.toBlob((blob) => {
+        canvas.toBlob(async (blob) => {
           const url = URL.createObjectURL(blob);
           const link = document.createElement('a');
           link.href = url;
@@ -154,12 +205,18 @@ const IndexFormPage = ({ onSubmit, initialData = [] }) => {
           link.click();
           document.body.removeChild(link);
           URL.revokeObjectURL(url);
+
+          // Increment download counter
+          await incrementDownloadCount();
         }, 'image/png');
       } else if (format === 'pdf') {
         const pdf = new jsPDF();
         const imgData = canvas.toDataURL('image/jpeg');
         pdf.addImage(imgData, 'JPEG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
         pdf.save('blank_index.pdf');
+
+        // Increment download counter
+        await incrementDownloadCount();
       }
     };
   };
@@ -183,61 +240,69 @@ const IndexFormPage = ({ onSubmit, initialData = [] }) => {
         </Box>
 
         <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
-          {formData.map((entry, index) => (
-            <Paper key={index} sx={{ p: 3, mb: 3, backgroundColor: '#f8f9fa', borderRadius: 2 }}>
-              <Typography variant="h6" sx={{ mb: 2 }}>Assignment {index + 1}</Typography>
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                <TextField
-  name="assignmentDescription"
-  label="Assignment Description"
-  fullWidth
-  multiline
-  rows={2}
-  value={entry.assignmentDescription}
-  onChange={(e) => handleChange(index, 'assignmentDescription', e.target.value)}
-  error={!!errors[index]?.assignmentDescription}
-  helperText={errors[index]?.assignmentDescription}
-  inputProps={{ maxLength: 500 }} // Limit to 500 characters
-/>
-
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    name="assignmentDate"
-                    label="Assignment Date (DD-MM-YYYY)"
-                    fullWidth
-                    value={entry.assignmentDate}
-                    onChange={(e) => handleChange(index, 'assignmentDate', e.target.value)}
-                    placeholder="DD-MM-YYYY"
-                    error={!!errors[index]?.assignmentDate}
-                    helperText={errors[index]?.assignmentDate}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    name="submissionDate"
-                    label="Submission Date (DD-MM-YYYY)"
-                    fullWidth
-                    value={entry.submissionDate}
-                    onChange={(e) => handleChange(index, 'submissionDate', e.target.value)}
-                    placeholder="DD-MM-YYYY"
-                    error={!!errors[index]?.submissionDate}
-                    helperText={errors[index]?.submissionDate}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    name="slNo"
-                    label="Serial Number"
-                    fullWidth
-                    type="number"
-                    value={entry.slNo}
-                    InputProps={{ readOnly: true }}
-                    sx={{ backgroundColor: '#f5f5f5' }}
-                    helperText="Auto-generated serial number"
-                  />
-                </Grid>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            {formData.map((entry, index) => (
+              <Paper key={index} sx={{ p: 3, mb: 3, backgroundColor: '#f8f9fa', borderRadius: 2 }}>
+                <Typography variant="h6" sx={{ mb: 2 }}>Assignment {index + 1}</Typography>
+                <Grid container spacing={3}>
+                  <Grid item xs={12}>
+                    <TextField
+                      name="assignmentDescription"
+                      label="Assignment Description"
+                      fullWidth
+                      multiline
+                      rows={2}
+                      value={entry.assignmentDescription}
+                      onChange={(e) => handleChange(index, 'assignmentDescription', e.target.value)}
+                      error={!!errors[index]?.assignmentDescription}
+                      helperText={errors[index]?.assignmentDescription}
+                      inputProps={{ maxLength: 500 }} // Limit to 500 characters
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <DatePicker
+                      label="Assignment Date"
+                      value={entry.assignmentDate}
+                      onChange={(newValue) => handleChange(index, 'assignmentDate', newValue)}
+                      format="DD-MM-YYYY"
+                      maxDate={maxDate}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          error: !!errors[index]?.assignmentDate,
+                          helperText: errors[index]?.assignmentDate || 'Max 1 year from today'
+                        }
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <DatePicker
+                      label="Submission Date"
+                      value={entry.submissionDate}
+                      onChange={(newValue) => handleChange(index, 'submissionDate', newValue)}
+                      format="DD-MM-YYYY"
+                      maxDate={maxDate}
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                          error: !!errors[index]?.submissionDate,
+                          helperText: errors[index]?.submissionDate || 'Max 1 year from today'
+                        }
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      name="slNo"
+                      label="Serial Number"
+                      fullWidth
+                      type="number"
+                      value={entry.slNo}
+                      InputProps={{ readOnly: true }}
+                      sx={{ backgroundColor: '#f5f5f5' }}
+                      helperText="Auto-generated serial number"
+                    />
+                  </Grid>
                 {formData.length > 1 && (
                   <Grid item xs={12} md={6} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                     <Button
@@ -252,6 +317,7 @@ const IndexFormPage = ({ onSubmit, initialData = [] }) => {
               </Grid>
             </Paper>
           ))}
+          </LocalizationProvider>
 
           {/* Add More Button */}
           <Box sx={{ textAlign: 'center', mb: 2 }}>
@@ -267,10 +333,10 @@ const IndexFormPage = ({ onSubmit, initialData = [] }) => {
 
           {/* Submit Button */}
           <Grid container justifyContent="center">
-            <Button 
-              type="submit" 
-              variant="contained" 
-              color="primary" 
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
               size="large"
               sx={{ minWidth: '200px' }}
             >

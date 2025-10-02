@@ -1,19 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Paper, Typography, Box, Divider, Grid, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 
-// Helper function to get the data from localStorage
-const getStoredData = () => {
-  const savedData = localStorage.getItem('formData');
-  return savedData ? JSON.parse(savedData) : [];
-};
-
 // Classic Template
-export const ClassicTemplate = () => {
-  const [formData, setFormData] = useState([]);
-
-  useEffect(() => {
-    setFormData(getStoredData());
-  }, []);
+export const ClassicTemplate = ({ formData = [] }) => {
 
   const totalRows = 10;
   const emptyRows = totalRows - formData.length;
@@ -78,12 +67,7 @@ export const ClassicTemplate = () => {
 };
 
 // Modern Template
-export const ModernTemplate = () => {
-  const [formData, setFormData] = useState([]);
-
-  useEffect(() => {
-    setFormData(getStoredData());
-  }, []);
+export const ModernTemplate = ({ formData = [] }) => {
 
   const totalRows = 10;
   const emptyRows = totalRows - formData.length;
@@ -142,12 +126,7 @@ export const ModernTemplate = () => {
 };
 
 // Minimalist Template
-export const MinimalistTemplate = () => {
-  const [formData, setFormData] = useState([]);
-
-  useEffect(() => {
-    setFormData(getStoredData());
-  }, []);
+export const MinimalistTemplate = ({ formData = [] }) => {
 
   const totalRows = 10;
   const emptyRows = totalRows - formData.length;

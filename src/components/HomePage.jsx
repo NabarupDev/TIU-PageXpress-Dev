@@ -1,6 +1,8 @@
 import { Box, Button, Typography, useMediaQuery, keyframes } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import DownloadIcon from "@mui/icons-material/Download";
 import pagexpressLogo from "../assets/pagexpress-logo.png";
+import { useState, useEffect } from "react";
 
 // Define bounce animation
 const bounce = keyframes`
@@ -16,6 +18,58 @@ const HomePage = () => {
   // Media Queries for Responsive Adjustments
   const isSmallScreen = useMediaQuery("(max-width: 600px)");
   const isMediumScreen = useMediaQuery("(max-width: 900px)");
+
+  // State for download count
+  const [downloadCount, setDownloadCount] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // API Ninjas Counter configuration
+  const API_NINJAS_KEY = import.meta.env.VITE_API_NINJAS_KEY;
+  const API_NINJAS_BASE_URL = 'https://api.api-ninjas.com/v1/counter';
+  const COUNTER_ID = import.meta.env.VITE_COUNTER_ID;
+
+  // Format number to compact notation (1k, 1.5k, 1M, etc.)
+  const formatCompactNumber = (num) => {
+    if (num < 1000) return num.toString();
+    if (num < 1000000) {
+      const formatted = num / 1000;
+      return formatted % 1 === 0 ? `${formatted}k` : `${formatted.toFixed(1)}k`;
+    }
+    if (num < 1000000000) {
+      const formatted = num / 1000000;
+      return formatted % 1 === 0 ? `${formatted}M` : `${formatted.toFixed(1)}M`;
+    }
+    const formatted = num / 1000000000;
+    return formatted % 1 === 0 ? `${formatted}B` : `${formatted.toFixed(1)}B`;
+  };
+
+  // Fetch download count on component mount
+  useEffect(() => {
+    const fetchDownloadCount = async () => {
+      try {
+        const response = await fetch(`${API_NINJAS_BASE_URL}?id=${COUNTER_ID}`, {
+          method: 'GET',
+          headers: {
+            'X-Api-Key': API_NINJAS_KEY
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          setDownloadCount(data.value || 0);
+        } else {
+          // console.warn('Could not fetch download count');
+          setDownloadCount(null);
+        }
+      } catch (error) {
+        // console.warn('Download counter unavailable:', error.message);
+        setDownloadCount(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDownloadCount();
+  }, []);
 
   return (
     <Box
@@ -60,6 +114,40 @@ const HomePage = () => {
         Create professional front & index pages for our Techno India University assignments
         with just a few clicks.
       </Typography>
+
+      {/* Download Counter Display */}
+      {!loading && downloadCount !== null && (
+        <Box
+          sx={{
+            mb: 3,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 1,
+          }}
+        >
+          <DownloadIcon sx={{ color: "primary.main", fontSize: isSmallScreen ? 20 : 24 }} />
+          <Typography
+            variant={isSmallScreen ? "body1" : "h6"}
+            sx={{ 
+              fontWeight: "600",
+              color: "text.primary",
+              letterSpacing: "0.5px"
+            }}
+          >
+            {formatCompactNumber(downloadCount)}
+          </Typography>
+          <Typography
+            variant={isSmallScreen ? "body2" : "body1"}
+            sx={{ 
+              color: "text.secondary",
+              fontWeight: "400"
+            }}
+          >
+            Total Downloads
+          </Typography>
+        </Box>
+      )}
 
       {/* Get Started Button */}
       <Button

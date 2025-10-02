@@ -20,13 +20,9 @@ import GenFotter from '../GenFooter';
 import ScrollToTop from '../ScrollToTop';
 
 const IndexGeneratorRouter = () => {
-  const [formData, setFormData] = useState({
-    assignmentDescription: '',
-    assignmentDate: '',
-    submissionDate: '',
-    signature: '',
-    slNo: 1, // Default serial number
-  });
+  const [formData, setFormData] = useState([
+    { assignmentDescription: '', assignmentDate: '', submissionDate: '', slNo: 1 }
+  ]);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const navigate = useNavigate();
 

@@ -31,9 +31,29 @@ const IndexPreviewPage = ({ formData, templateType }) => {
   const open = Boolean(anchorEl);
   const menuId = 'index-save-options-menu';
 
+  // API Ninjas Counter configuration
+  const API_NINJAS_KEY = import.meta.env.VITE_API_NINJAS_KEY;
+  const API_NINJAS_BASE_URL = 'https://api.api-ninjas.com/v1/counter';
+  const COUNTER_ID = import.meta.env.VITE_COUNTER_ID;
+
   useEffect(() => {
     setIsMobile(isMobileDevice()); // Check if the user is on mobile
   }, []);
+
+  // Increment download count
+  const incrementDownloadCount = async () => {
+    try {
+      await fetch(`${API_NINJAS_BASE_URL}?id=${COUNTER_ID}&hit=true`, {
+        method: 'GET',
+        headers: {
+          'X-Api-Key': API_NINJAS_KEY
+        }
+      });
+    } catch (error) {
+      // Silently fail - don't block the download
+      // console.warn('Could not update download counter:', error.message);
+    }
+  };
 
   // Handle dropdown open & close
   const handleOpenMenu = (event) => setAnchorEl(event.currentTarget);
@@ -71,8 +91,11 @@ const IndexPreviewPage = ({ formData, templateType }) => {
         link.download = `index-page.${format}`;
         link.click();
       }
+      
+      // Increment download counter
+      await incrementDownloadCount();
     } catch (error) {
-      console.error(`Error saving as ${format}:`, error);
+      // console.error(`Error saving as ${format}:`, error);
       alert(`Error saving as ${format}. Please try again.`);
     } finally {
       setIsGenerating(false);
@@ -169,6 +192,11 @@ const IndexPreviewPage = ({ formData, templateType }) => {
                 vertical: 'top',
                 horizontal: 'center',
               }}
+              MenuListProps={{
+                'aria-labelledby': 'index-save-options-menu',
+                autoFocusItem: false,
+              }}
+              disableAutoFocusItem
             >
               <MenuItem onClick={() => downloadAsFile('pdf')}>Save as PDF</MenuItem>
               <MenuItem onClick={() => downloadAsFile('png')}>Save as PNG</MenuItem>
