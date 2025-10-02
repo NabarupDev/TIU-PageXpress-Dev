@@ -40,8 +40,25 @@ const Footer = () => {
 
   // Fetch download count on component mount
   useEffect(() => {
+    const CACHE_KEY = 'download_count_cache';
+    const CACHE_DURATION = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
+
     const fetchDownloadCount = async () => {
       try {
+        // Check if cached data exists and is still valid
+        const cachedData = localStorage.getItem(CACHE_KEY);
+        if (cachedData) {
+          const { value, timestamp } = JSON.parse(cachedData);
+          const now = Date.now();
+          
+          // If cache is still valid (less than 3 hours old)
+          if (now - timestamp < CACHE_DURATION) {
+            setDownloadCount(value);
+            return;
+          }
+        }
+
+        // Fetch fresh data from API
         const response = await fetch(`${API_NINJAS_BASE_URL}?id=${COUNTER_ID}`, {
           method: 'GET',
           headers: {
@@ -51,7 +68,14 @@ const Footer = () => {
         
         if (response.ok) {
           const data = await response.json();
-          setDownloadCount(data.value || 0);
+          const downloadValue = data.value || 0;
+          setDownloadCount(downloadValue);
+          
+          // Store in local storage with timestamp
+          localStorage.setItem(CACHE_KEY, JSON.stringify({
+            value: downloadValue,
+            timestamp: Date.now()
+          }));
         }
       } catch (error) {
         // console.warn('Download counter unavailable:', error.message);
