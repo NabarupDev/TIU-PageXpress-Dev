@@ -54,6 +54,7 @@ const FormPage = () => {
       section: formData.section,
       group: formData.group,
       semester: formData.semester,
+      subject: formData.subject,
       year: formData.year,
     };
     localStorage.setItem("projectData", JSON.stringify(dataToStore));

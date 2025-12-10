@@ -53,18 +53,18 @@ const Template1 = ({ data }) => {
 
       {/* Subject Title */}
       <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "40%", marginTop: "40%" }}>
-        Subject: <span style={{ textDecoration: "underline" }}>{formData.subject ? formData.subject.toUpperCase() : "SUBJECT"}</span>
+        Subject: <span style={{ textDecoration: "underline" }}>{formData.subject ? formData.subject.toUpperCase() : ""}</span>
       </Typography>
 
       {/* Student Details Table */}
       <Table sx={{ width: "100%", border: "1px solid black", marginTop: "20px" }}>
         <TableBody>
-          {renderRow("STUDENT ID", formData.studentId)}
-          {renderRow("NAME", formData.name)}
-          {renderRow("DEPARTMENT", section ? `${section.toUpperCase()} (GROUP - ${group.toUpperCase()})` : stream)}
+          {renderRow("STUDENT ID", formData.studentId || "")}
+          {renderRow("NAME", formData.name || "")}
+          {renderRow("DEPARTMENT", section ? `${section.toUpperCase()} (GROUP - ${group.toUpperCase()})` : stream || "")}
           {renderRow("SEMESTER", formData.semester ? formData.semester.toUpperCase() + " SEMESTER" : "")}
-          {renderRow("STREAM", formData.stream)}
-          {renderRow("YEAR", formData.year)}
+          {renderRow("STREAM", formData.stream || "")}
+          {renderRow("YEAR", formData.year || "")}
         </TableBody>
       </Table>
     </Box>

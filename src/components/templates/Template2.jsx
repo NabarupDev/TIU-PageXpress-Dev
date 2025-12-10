@@ -43,17 +43,17 @@ const Template2 = ({ data }) => {
 
             {/* Subject Title */}
             <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "40%", marginTop: "30%" }}>
-                Subject: <span style={{ textDecoration: "underline" }}>{subject ? subject.toUpperCase() : "SUBJECT"}</span>
+                Subject: <span style={{ textDecoration: "underline" }}>{subject ? subject.toUpperCase() : ""}</span>
             </Typography>
 
             {/* Student Details */}
             <Box sx={{ display: "flex", flexDirection: "column", alignItems: "left", textAlign: "left", width: "60%", margin: "auto" }}>
-                {renderDetail("STUDENT ID", studentId)}
-                {renderDetail("NAME", name)}
-                {renderDetail("DEPARTMENT", section ? `${section.toUpperCase()} (GROUP - ${group.toUpperCase()})` : stream)}
+                {renderDetail("STUDENT ID", studentId || "")}
+                {renderDetail("NAME", name || "")}
+                {renderDetail("DEPARTMENT", section ? `${section.toUpperCase()} (GROUP - ${group.toUpperCase()})` : stream || "")}
                 {renderDetail("SEMESTER", semester ? semester.toUpperCase() + " SEMESTER" : "")}
-                {renderDetail("STREAM", stream)}
-                {renderDetail("YEAR", year)}
+                {renderDetail("STREAM", stream || "")}
+                {renderDetail("YEAR", year || "")}
             </Box>
         </Box>
     );
