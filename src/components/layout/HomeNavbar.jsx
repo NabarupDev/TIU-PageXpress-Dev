@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AppBar, Toolbar, Box, Typography, IconButton, Drawer, List, ListItem, ListItemText, useMediaQuery } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import pagexpressLogo from "../assets/pagexpress-logo.png";
+import pagexpressLogo from "../../assets/pagexpress-logo.png";
 
 const HomeNavbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);

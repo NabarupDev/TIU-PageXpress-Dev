@@ -27,7 +27,7 @@ const Template1 = ({ data }) => {
       <Box sx={{ alignContent: "start" }}>
         <Grid container alignItems="center" justifyContent="center" spacing={2}>
           {/* Logo on the Left */}
-          <Grid item>
+          <Grid>
             <img
               src={technoIndiaLogo}
               alt="Logo"
@@ -36,7 +36,7 @@ const Template1 = ({ data }) => {
           </Grid>
 
           {/* University Name on the Right */}
-          <Grid item>
+          <Grid>
             <Typography variant="h5" sx={{ fontWeight: "bold", textDecoration: "underline" }}>
               {institution || "TECHNO INDIA UNIVERSITY"}
             </Typography>

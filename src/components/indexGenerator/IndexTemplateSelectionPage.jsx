@@ -45,7 +45,7 @@ const IndexTemplateSelectionPage = ({ onTemplateSelect }) => {
 
         <Grid container spacing={4}>
           {templates.map((template) => (
-            <Grid item xs={12} md={4} key={template.id}>
+            <Grid size={{ xs: 12, md: 4 }} key={template.id}>
               <Card
                 onClick={() => handleSelect(template)}
                 sx={{

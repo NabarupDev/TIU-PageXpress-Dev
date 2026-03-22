@@ -54,7 +54,7 @@ const WhyUseThis = () => {
       {/* Benefits Grid */}
       <Grid container spacing={4} justifyContent="center" mt={4}>
         {benefits.map((benefit, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
             <Paper
               elevation={isSmallScreen ? 2 : 6}
               sx={{

@@ -183,7 +183,7 @@ const FormPage = () => {
 
           <form onSubmit={handleSubmit}>
             <Grid container spacing={3}>
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   fullWidth
                   label="Full Name"
@@ -195,7 +195,7 @@ const FormPage = () => {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   fullWidth
                   label="Student ID"
@@ -207,7 +207,7 @@ const FormPage = () => {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <Autocomplete
                   fullWidth
                   options={streamOptions}
@@ -235,7 +235,7 @@ const FormPage = () => {
                   }
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   fullWidth
                   label="Section"
@@ -247,7 +247,7 @@ const FormPage = () => {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   fullWidth
                   label="Group"
@@ -259,7 +259,7 @@ const FormPage = () => {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <FormControl fullWidth variant="outlined">
                   <InputLabel>Semester</InputLabel>
                   <Select
@@ -278,7 +278,7 @@ const FormPage = () => {
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   fullWidth
                   label="Subject"
@@ -291,7 +291,7 @@ const FormPage = () => {
                 />
               </Grid>
               
-              <Grid item xs={12} md={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <FormControl fullWidth variant="outlined">
                   <InputLabel>Year</InputLabel>
                   <Select
@@ -312,7 +312,7 @@ const FormPage = () => {
               </Grid>
 
               {/* Institution Name - Default & Non-Editable */}
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <TextField
                   fullWidth
                   label="Institution Name"
@@ -330,7 +330,7 @@ const FormPage = () => {
                 />
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Button
                   type="submit"
                   variant="contained"

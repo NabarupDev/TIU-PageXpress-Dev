@@ -67,7 +67,7 @@ const Instructions = () => {
       {/* Instructions Grid */}
       <Grid container spacing={4} justifyContent="center" mt={4}>
         {instructions.map((section, index) => (
-          <Grid item xs={12} sm={12} md={10} key={index}>
+          <Grid size={{ xs: 12, sm: 12, md: 10 }} key={index}>
             <Paper
               elevation={isSmallScreen ? 2 : 6}
               sx={{

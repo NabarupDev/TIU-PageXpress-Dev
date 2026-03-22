@@ -5,19 +5,19 @@ import IndexFormPage from './IndexFormPage';
 import IndexTemplateSelectionPage from './IndexTemplateSelectionPage';
 import IndexPreviewPage from './IndexPreviewPage';
 import CssBaseline from '@mui/material/CssBaseline';
-import FormPage from '../FormPage';
-import TemplateSelection from '../TemplateSelection';
-import PreviewPage from '../PreviewPage';
-import HomeNavbar from '../HomeNavbar';
-import Navbar from '../Navbar';
-import HomePage from '../HomePage';
-import GeneratePage from "../GeneratePage";
-import HowItWorks from "../HowItWorks";
-import WhyUseThis from "../WhyUseThis";
-import Instructions from '../Instructions';
-import Footer from '../Footer';
-import GenFotter from '../GenFooter';
-import ScrollToTop from '../ScrollToTop';
+import FormPage from '../pages/FormPage';
+import TemplateSelection from '../pages/TemplateSelection';
+import PreviewPage from '../pages/PreviewPage';
+import HomeNavbar from '../layout/HomeNavbar';
+import Navbar from '../layout/Navbar';
+import HomePage from '../pages/HomePage';
+import GeneratePage from "../pages/GeneratePage";
+import HowItWorks from "../sections/HowItWorks";
+import WhyUseThis from "../sections/WhyUseThis";
+import Instructions from '../sections/Instructions';
+import Footer from '../layout/Footer';
+import GenFotter from '../layout/GenFooter';
+import ScrollToTop from '../common/ScrollToTop';
 
 const IndexGeneratorRouter = () => {
   const [formData, setFormData] = useState([

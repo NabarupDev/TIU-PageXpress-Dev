@@ -151,7 +151,7 @@ const IndexPreviewPage = ({ formData, templateType }) => {
 
         {/* Buttons */}
         <Grid container justifyContent="space-between" sx={{ mt: 4 }}>
-          <Grid item>
+          <Grid>
             <Button 
               variant="outlined" 
               onClick={() => navigate('/select-template')}
@@ -160,7 +160,7 @@ const IndexPreviewPage = ({ formData, templateType }) => {
               Back
             </Button>
           </Grid>
-          <Grid item>
+          <Grid>
             {/* Save As Button with Dropdown - Updated to match PreviewPage */}
             <Tooltip title="Click to see save options">
               <Button

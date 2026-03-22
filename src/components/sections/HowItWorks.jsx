@@ -45,7 +45,7 @@ const HowItWorks = () => {
       {/* Steps Grid */}
       <Grid container spacing={4} justifyContent="center" mt={4}>
         {steps.map((step, index) => (
-          <Grid item xs={12} sm={6} md={3} key={index}>
+          <Grid size={{ xs: 12, sm: 6, md: 3 }} key={index}>
             <Box
               className="step-box"
               sx={{

@@ -245,7 +245,7 @@ import defaultIndex from '../../assets/default_index.jpg';const IndexFormPage = 
               <Paper key={index} sx={{ p: 3, mb: 3, backgroundColor: '#f8f9fa', borderRadius: 2 }}>
                 <Typography variant="h6" sx={{ mb: 2 }}>Assignment {index + 1}</Typography>
                 <Grid container spacing={3}>
-                  <Grid item xs={12}>
+                  <Grid size={12}>
                     <TextField
                       name="assignmentDescription"
                       label="Assignment Description"
@@ -259,7 +259,7 @@ import defaultIndex from '../../assets/default_index.jpg';const IndexFormPage = 
                       inputProps={{ maxLength: 500 }} // Limit to 500 characters
                     />
                   </Grid>
-                  <Grid item xs={12} md={6}>
+                  <Grid size={{ xs: 12, md: 6 }}>
                     <DatePicker
                       label="Assignment Date"
                       value={entry.assignmentDate}
@@ -275,7 +275,7 @@ import defaultIndex from '../../assets/default_index.jpg';const IndexFormPage = 
                       }}
                     />
                   </Grid>
-                  <Grid item xs={12} md={6}>
+                  <Grid size={{ xs: 12, md: 6 }}>
                     <DatePicker
                       label="Submission Date"
                       value={entry.submissionDate}
@@ -291,7 +291,7 @@ import defaultIndex from '../../assets/default_index.jpg';const IndexFormPage = 
                       }}
                     />
                   </Grid>
-                  <Grid item xs={12} md={6}>
+                  <Grid size={{ xs: 12, md: 6 }}>
                     <TextField
                       name="slNo"
                       label="Serial Number"
@@ -304,7 +304,7 @@ import defaultIndex from '../../assets/default_index.jpg';const IndexFormPage = 
                     />
                   </Grid>
                 {formData.length > 1 && (
-                  <Grid item xs={12} md={6} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                  <Grid size={{ xs: 12, md: 6 }} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                     <Button
                       variant="outlined"
                       color="error"

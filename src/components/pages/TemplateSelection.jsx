@@ -81,7 +81,7 @@ const TemplateSelection = () => {
                 text: "Balanced academic cover page with a centered institutional logo.",
               },
             ].map((template) => (
-              <Grid item xs={12} sm={6} md={4} key={template.id}>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={template.id}>
                 <Card
                   elevation={3}
                   sx={{

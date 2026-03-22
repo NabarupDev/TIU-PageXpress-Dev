@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { AppBar, Toolbar, Button, Box, IconButton, Drawer } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import MenuIcon from '@mui/icons-material/Menu'; // Import Menu Icon
-import pagexpressLogo from "../assets/pagexpress-logo.png";
+import pagexpressLogo from "../../assets/pagexpress-logo.png";
 
 const Navbar = () => {
   const navigate = useNavigate();

@@ -2,7 +2,7 @@ import { Box, Container, Typography, Grid, Link, IconButton } from "@mui/materia
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import DownloadIcon from '@mui/icons-material/Download';
-import pagexpressLogo from "../assets/pagexpress-logo.png";
+import pagexpressLogo from "../../assets/pagexpress-logo.png";
 import { useState, useEffect } from "react";
 
 const Footer = () => {
@@ -93,7 +93,7 @@ const Footer = () => {
       <Container maxWidth="lg">
         <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
           {/* Logo Section */}
-          <Grid item xs={12} sm="auto">
+          <Grid size={{ xs: 12, sm: "auto" }}>
             <img
               src={pagexpressLogo}
               alt="TIU Logo"
@@ -104,7 +104,7 @@ const Footer = () => {
           </Grid>
 
           {/* Navigation Links */}
-          <Grid item xs={12} sm="auto">
+          <Grid size={{ xs: 12, sm: "auto" }}>
             <Grid container spacing={3} justifyContent="center" alignItems="center">
               {[
                 { name: "Home", id: "home-section" },
@@ -113,7 +113,7 @@ const Footer = () => {
                 { name: "Benefits", id: "benefits-section" },
                 { name: "Instructions", id: "instructions-section" }
               ].map((item, index) => (
-                <Grid item key={index}>
+                <Grid key={index}>
                   <Link
                     component="button"  // Use button instead of href
                     onClick={() => scrollToSection(item.id)}

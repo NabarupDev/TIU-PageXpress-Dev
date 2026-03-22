@@ -1,7 +1,7 @@
 import { Box, Button, Typography, useMediaQuery, keyframes } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DownloadIcon from "@mui/icons-material/Download";
-import pagexpressLogo from "../assets/pagexpress-logo.png";
+import pagexpressLogo from "../../assets/pagexpress-logo.png";
 import { useState, useEffect } from "react";
 
 // Define bounce animation
