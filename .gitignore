@@ -175,6 +175,5 @@ $RECYCLE.BIN/
 .umi-test/
 sitemap.xml
 robots.txt
-package-lock.json
 yarn.lock
 pnpm-lock.yaml
