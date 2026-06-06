@@ -173,7 +173,5 @@ $RECYCLE.BIN/
 .umi/
 .umi-production/
 .umi-test/
-sitemap.xml
-robots.txt
 yarn.lock
 pnpm-lock.yaml
