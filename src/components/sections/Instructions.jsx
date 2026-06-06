@@ -51,9 +51,9 @@ const Instructions = () => {
         py: { xs: 6, md: 10 },
       }}
     >
-      {/* Section Title */}
+      {}
       <Typography
-        variant={isSmallScreen ? "h5" : isMediumScreen ? "h4" : "h3"} // Adaptive text size
+        variant={isSmallScreen ? "h5" : isMediumScreen ? "h4" : "h3"}
         fontWeight="bold"
         gutterBottom
         sx={{
@@ -64,7 +64,7 @@ const Instructions = () => {
         Instructions
       </Typography>
 
-      {/* Instructions Grid */}
+      {}
       <Grid container spacing={4} justifyContent="center" mt={4}>
         {instructions.map((section, index) => (
           <Grid size={{ xs: 12, sm: 12, md: 10 }} key={index}>
@@ -75,26 +75,26 @@ const Instructions = () => {
                 borderRadius: "12px",
                 textAlign: "left",
                 transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
-                backgroundColor: index % 2 === 0 ? "#F9F9F9" : "white", // Alternating colors for better UI
+                backgroundColor: index % 2 === 0 ? "#F9F9F9" : "white",
               }}
             >
-              {/* Section Title */}
+              {}
               <Typography
-                variant={isSmallScreen ? "h6" : "h5"} // Responsive font size
+                variant={isSmallScreen ? "h6" : "h5"}
                 fontWeight="bold"
                 sx={{ color: theme.palette.primary.main }}
               >
                 {section.title}
               </Typography>
 
-              {/* List of Details */}
+              {}
               <Box component="ul" sx={{ paddingLeft: 3, mt: 1 }}>
                 {section.details.map((item, idx) => (
                   <Box component="li" key={idx} sx={{ mb: 1 }}>
                     <Typography
                       variant="body1"
                       color="text.secondary"
-                      sx={{ fontSize: isSmallScreen ? "0.9rem" : "1rem" }} // Scaling text
+                      sx={{ fontSize: isSmallScreen ? "0.9rem" : "1rem" }}
                     >
                       {item}
                     </Typography>

@@ -16,7 +16,7 @@ import jsPDF from 'jspdf';
 import defaultIndex from '../../assets/default_index.jpg';const IndexFormPage = ({ onSubmit, initialData = [] }) => {
   const [formData, setFormData] = useState(() => {
     if (initialData.length > 0) {
-      // Convert any string dates to dayjs objects
+
       return initialData.map(item => ({
         ...item,
         assignmentDate: item.assignmentDate ? dayjs(item.assignmentDate) : null,
@@ -28,15 +28,15 @@ import defaultIndex from '../../assets/default_index.jpg';const IndexFormPage = 
 
   const [errors, setErrors] = useState([]);
 
-  // Date constraints
+
   const maxDate = dayjs().add(1, 'year');
 
-  // API Ninjas Counter configuration
+
   const API_NINJAS_KEY = import.meta.env.VITE_API_NINJAS_KEY;
   const API_NINJAS_BASE_URL = 'https://api.api-ninjas.com/v1/counter';
   const COUNTER_ID = import.meta.env.VITE_COUNTER_ID;
 
-  // Increment download count
+
   const incrementDownloadCount = async () => {
     try {
       await fetch(`${API_NINJAS_BASE_URL}?id=${COUNTER_ID}&hit=true`, {
@@ -46,8 +46,7 @@ import defaultIndex from '../../assets/default_index.jpg';const IndexFormPage = 
         }
       });
     } catch (error) {
-      // Silently fail - don't block the download
-      // console.warn('Could not update download counter:', error.message);
+
     }
   };
 
@@ -74,28 +73,28 @@ import defaultIndex from '../../assets/default_index.jpg';const IndexFormPage = 
     setErrors(newErrors);
     return newErrors.every(err => Object.keys(err).length === 0);
   };  const formatDateInput = (value) => {
-    // This function is no longer needed with date pickers
+
     return value;
   };
 
   const handleChange = (index, field, value) => {
-    // For 'assignmentDescription', no limit is needed.
+
     if (field === 'assignmentDescription') {
       const updatedData = [...formData];
       updatedData[index][field] = value;
       setFormData(updatedData);
 
-      // Store the updated form data in sessionStorage
+
       sessionStorage.setItem('formData', JSON.stringify(updatedData));
     }
 
-    // For date fields, handle dayjs objects
+
     if (field === 'submissionDate' || field === 'assignmentDate') {
       const updatedData = [...formData];
       updatedData[index][field] = value;
       setFormData(updatedData);
 
-      // Store the updated form data in sessionStorage (convert dates to ISO strings)
+
       const dataToStore = updatedData.map(item => ({
         ...item,
         assignmentDate: item.assignmentDate ? dayjs(item.assignmentDate).toISOString() : null,
@@ -111,7 +110,7 @@ import defaultIndex from '../../assets/default_index.jpg';const IndexFormPage = 
       const updatedData = [...formData, { assignmentDescription: '', assignmentDate: null, submissionDate: null, slNo: formData.length + 1 }];
       setFormData(updatedData);
 
-      // Store the updated form data in sessionStorage
+
       const dataToStore = updatedData.map(item => ({
         ...item,
         assignmentDate: item.assignmentDate ? dayjs(item.assignmentDate).toISOString() : null,
@@ -123,10 +122,10 @@ import defaultIndex from '../../assets/default_index.jpg';const IndexFormPage = 
 
   const handleRemoveRow = (index) => {
     const updatedData = formData.filter((_, i) => i !== index);
-    updatedData.forEach((item, i) => (item.slNo = i + 1)); // Reassign serial numbers
+    updatedData.forEach((item, i) => (item.slNo = i + 1));
     setFormData(updatedData);
 
-    // Store the updated form data in sessionStorage
+
     const dataToStore = updatedData.map(item => ({
       ...item,
       assignmentDate: item.assignmentDate ? dayjs(item.assignmentDate).toISOString() : null,
@@ -138,7 +137,7 @@ import defaultIndex from '../../assets/default_index.jpg';const IndexFormPage = 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      // Convert dates to DD-MM-YYYY format for submission
+
       const formattedData = formData.map(item => ({
         ...item,
         assignmentDate: item.assignmentDate ? dayjs(item.assignmentDate).format('DD-MM-YYYY') : '',
@@ -146,7 +145,7 @@ import defaultIndex from '../../assets/default_index.jpg';const IndexFormPage = 
       }));
       onSubmit(formattedData);
 
-      // Store the form data in sessionStorage when the form is submitted
+
       const dataToStore = formData.map(item => ({
         ...item,
         assignmentDate: item.assignmentDate ? dayjs(item.assignmentDate).toISOString() : null,
@@ -156,14 +155,14 @@ import defaultIndex from '../../assets/default_index.jpg';const IndexFormPage = 
     }
   };
 
-  // Retrieve the saved form data from sessionStorage when the component mounts
+
   React.useEffect(() => {
-    // Only restore if initialData is empty (to avoid conflicts)
+
     if (initialData.length === 0) {
       const savedData = sessionStorage.getItem('formData');
       if (savedData) {
         const parsedData = JSON.parse(savedData);
-        // Convert ISO strings back to dayjs objects
+
         const restoredData = parsedData.map(item => ({
           ...item,
           assignmentDate: item.assignmentDate ? dayjs(item.assignmentDate) : null,
@@ -174,15 +173,23 @@ import defaultIndex from '../../assets/default_index.jpg';const IndexFormPage = 
     }
   }, [initialData]);
 
+
+  const getTimestamp = () => {
+    const now = new Date();
+    const date = now.toISOString().split('T')[0];
+    const time = now.toTimeString().split(' ')[0].replace(/:/g, '-');
+    return `${date}_${time}`;
+  };
+
   const downloadJPG = async () => {
     const link = document.createElement('a');
     link.href = defaultIndex;
-    link.download = 'blank_index.jpg';
+    link.download = `blank_index_${getTimestamp()}.jpg`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 
-    // Increment download counter
+
     await incrementDownloadCount();
   };
 
@@ -200,22 +207,22 @@ import defaultIndex from '../../assets/default_index.jpg';const IndexFormPage = 
           const url = URL.createObjectURL(blob);
           const link = document.createElement('a');
           link.href = url;
-          link.download = 'blank_index.png';
+          link.download = `blank_index_${getTimestamp()}.png`;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
           URL.revokeObjectURL(url);
 
-          // Increment download counter
+
           await incrementDownloadCount();
         }, 'image/png');
       } else if (format === 'pdf') {
         const pdf = new jsPDF();
         const imgData = canvas.toDataURL('image/jpeg');
         pdf.addImage(imgData, 'JPEG', 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
-        pdf.save('blank_index.pdf');
+        pdf.save(`blank_index_${getTimestamp()}.pdf`);
 
-        // Increment download counter
+
         await incrementDownloadCount();
       }
     };
@@ -256,7 +263,7 @@ import defaultIndex from '../../assets/default_index.jpg';const IndexFormPage = 
                       onChange={(e) => handleChange(index, 'assignmentDescription', e.target.value)}
                       error={!!errors[index]?.assignmentDescription}
                       helperText={errors[index]?.assignmentDescription}
-                      inputProps={{ maxLength: 500 }} // Limit to 500 characters
+                      inputProps={{ maxLength: 500 }}
                     />
                   </Grid>
                   <Grid size={{ xs: 12, md: 6 }}>
@@ -319,7 +326,7 @@ import defaultIndex from '../../assets/default_index.jpg';const IndexFormPage = 
           ))}
           </LocalizationProvider>
 
-          {/* Add More Button */}
+          {}
           <Box sx={{ textAlign: 'center', mb: 2 }}>
             <Button
               variant="contained"
@@ -331,7 +338,7 @@ import defaultIndex from '../../assets/default_index.jpg';const IndexFormPage = 
             </Button>
           </Box>
 
-          {/* Submit Button */}
+          {}
           <Grid container justifyContent="center">
             <Button
               type="submit"

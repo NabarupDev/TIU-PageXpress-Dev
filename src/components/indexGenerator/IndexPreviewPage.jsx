@@ -17,7 +17,7 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { ClassicTemplate, ModernTemplate, MinimalistTemplate } from './IndexTemplateComponents';
 
-// Function to check if user is on a mobile device
+
 const isMobileDevice = () => {
   return /Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
 };
@@ -25,22 +25,22 @@ const isMobileDevice = () => {
 const IndexPreviewPage = ({ formData, templateType }) => {
   const previewRef = useRef(null);
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = useState(null); // For dropdown menu
+  const [anchorEl, setAnchorEl] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const open = Boolean(anchorEl);
   const menuId = 'index-save-options-menu';
 
-  // API Ninjas Counter configuration
+
   const API_NINJAS_KEY = import.meta.env.VITE_API_NINJAS_KEY;
   const API_NINJAS_BASE_URL = 'https://api.api-ninjas.com/v1/counter';
   const COUNTER_ID = import.meta.env.VITE_COUNTER_ID;
 
   useEffect(() => {
-    setIsMobile(isMobileDevice()); // Check if the user is on mobile
+    setIsMobile(isMobileDevice());
   }, []);
 
-  // Increment download count
+
   const incrementDownloadCount = async () => {
     try {
       await fetch(`${API_NINJAS_BASE_URL}?id=${COUNTER_ID}&hit=true`, {
@@ -50,17 +50,24 @@ const IndexPreviewPage = ({ formData, templateType }) => {
         }
       });
     } catch (error) {
-      // Silently fail - don't block the download
-      // console.warn('Could not update download counter:', error.message);
+
     }
   };
 
-  // Handle dropdown open & close
+
   const handleOpenMenu = (event) => setAnchorEl(event.currentTarget);
   const handleCloseMenu = () => setAnchorEl(null);
 
+
+  const getTimestamp = () => {
+    const now = new Date();
+    const date = now.toISOString().split('T')[0];
+    const time = now.toTimeString().split(' ')[0].replace(/:/g, '-');
+    return `${date}_${time}`;
+  };
+
   const downloadAsFile = async (format) => {
-    handleCloseMenu(); // Close menu after selecting format
+    handleCloseMenu();
     setIsGenerating(true);
 
     try {
@@ -84,25 +91,25 @@ const IndexPreviewPage = ({ formData, templateType }) => {
         const imgWidth = 210; 
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
         pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-        pdf.save('index-page.pdf');
+        pdf.save(`index_page_${getTimestamp()}.pdf`);
       } else {
         const link = document.createElement('a');
         link.href = imgData;
-        link.download = `index-page.${format}`;
+        link.download = `index_page_${getTimestamp()}.${format}`;
         link.click();
       }
       
-      // Increment download counter
+
       await incrementDownloadCount();
     } catch (error) {
-      // console.error(`Error saving as ${format}:`, error);
+
       alert(`Error saving as ${format}. Please try again.`);
     } finally {
       setIsGenerating(false);
     }
   };
 
-  // Renders the selected template
+
   const renderTemplate = () => {
     switch(templateType) {
       case 'classic': return <ClassicTemplate formData={formData} />;

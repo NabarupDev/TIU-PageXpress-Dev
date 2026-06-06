@@ -3,8 +3,9 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DownloadIcon from "@mui/icons-material/Download";
 import pagexpressLogo from "../../assets/pagexpress-logo.png";
 import { useState, useEffect } from "react";
+import WhatsNew from "../sections/WhatsNew";
 
-// Define bounce animation
+
 const bounce = keyframes`
   0%, 100% {
     transform: translateY(0);
@@ -15,20 +16,24 @@ const bounce = keyframes`
 `;
 
 const HomePage = () => {
-  // Media Queries for Responsive Adjustments
+
   const isSmallScreen = useMediaQuery("(max-width: 600px)");
   const isMediumScreen = useMediaQuery("(max-width: 900px)");
 
-  // State for download count
+  const currentDate = new Date();
+  const expiryDate = new Date("2026-08-01T00:00:00");
+  const showWhatsNew = currentDate < expiryDate;
+
+
   const [downloadCount, setDownloadCount] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // API Ninjas Counter configuration
+
   const API_NINJAS_KEY = import.meta.env.VITE_API_NINJAS_KEY;
   const API_NINJAS_BASE_URL = 'https://api.api-ninjas.com/v1/counter';
   const COUNTER_ID = import.meta.env.VITE_COUNTER_ID;
 
-  // Format number to compact notation (1k, 1.5k, 1M, etc.)
+
   const formatCompactNumber = (num) => {
     if (num < 1000) return num.toString();
     if (num < 1000000) {
@@ -43,20 +48,20 @@ const HomePage = () => {
     return formatted % 1 === 0 ? `${formatted}B` : `${formatted.toFixed(1)}B`;
   };
 
-  // Fetch download count on component mount
+
   useEffect(() => {
     const CACHE_KEY = 'download_count_cache';
-    const CACHE_DURATION = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
+    const CACHE_DURATION = 3 * 60 * 60 * 1000;
 
     const fetchDownloadCount = async () => {
       try {
-        // Check if cached data exists and is still valid
+
         const cachedData = localStorage.getItem(CACHE_KEY);
         if (cachedData) {
           const { value, timestamp } = JSON.parse(cachedData);
           const now = Date.now();
           
-          // If cache is still valid (less than 3 hours old)
+
           if (now - timestamp < CACHE_DURATION) {
             setDownloadCount(value);
             setLoading(false);
@@ -64,7 +69,7 @@ const HomePage = () => {
           }
         }
 
-        // Fetch fresh data from API
+
         const response = await fetch(`${API_NINJAS_BASE_URL}?id=${COUNTER_ID}`, {
           method: 'GET',
           headers: {
@@ -77,17 +82,17 @@ const HomePage = () => {
           const downloadValue = data.value || 0;
           setDownloadCount(downloadValue);
           
-          // Store in local storage with timestamp
+
           localStorage.setItem(CACHE_KEY, JSON.stringify({
             value: downloadValue,
             timestamp: Date.now()
           }));
         } else {
-          // console.warn('Could not fetch download count');
+
           setDownloadCount(null);
         }
       } catch (error) {
-        // console.warn('Download counter unavailable:', error.message);
+
         setDownloadCount(null);
       } finally {
         setLoading(false);
@@ -112,7 +117,7 @@ const HomePage = () => {
         paddingTop: "80px",
       }}
     >
-      {/* Responsive Logo */}
+      {}
       <img
         src={pagexpressLogo}
         alt="TIU Logo"
@@ -131,16 +136,22 @@ const HomePage = () => {
       </Typography>
 
 
-      {/* Responsive Subtext */}
+      {}
       <Typography
         variant={isSmallScreen ? "body1" : "h6"}
-        sx={{ mt: 2, mb: 4, maxWidth: "600px" }}
+        sx={{ mt: 1.5, mb: 2, maxWidth: "600px" }}
       >
         Create professional front & index pages for our Techno India University assignments
         with just a few clicks.
       </Typography>
 
-      {/* Download Counter Display */}
+      {showWhatsNew && (
+        <Box sx={{ width: "100%", maxWidth: "md", px: { xs: 2, md: 0 }, mb: 2.5 }}>
+          <WhatsNew />
+        </Box>
+      )}
+
+      {}
       {!loading && downloadCount !== null && (
         <Box
           sx={{
@@ -174,7 +185,7 @@ const HomePage = () => {
         </Box>
       )}
 
-      {/* Get Started Button */}
+      {}
       <Button
         variant="contained"
         sx={{
@@ -193,14 +204,14 @@ const HomePage = () => {
         Get Started
       </Button>
 
-      {/* Animated Scroll Down Indicator */}
-      <Box sx={{ mt: 6, cursor: "pointer" }}>
+      {}
+      <Box sx={{ mt: 4, cursor: "pointer" }}>
         <KeyboardArrowDownIcon
           onClick={() => window.scrollTo({ top: window.innerHeight, behavior: "smooth" })}
           sx={{
             fontSize: isSmallScreen ? 30 : 40,
             color: "gray",
-            animation: `${bounce} 1.5s infinite`, // Apply bounce animation
+            animation: `${bounce} 1.5s infinite`,
           }}
         />
       </Box>

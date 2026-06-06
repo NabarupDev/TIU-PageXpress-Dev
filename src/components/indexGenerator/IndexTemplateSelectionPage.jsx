@@ -63,9 +63,9 @@ const IndexTemplateSelectionPage = ({ onTemplateSelect }) => {
                 <CardMedia
                   component="img"
                   height="200"
-                  image={template.image}  // Use the image URL directly
+                  image={template.image}
                   alt={template.name}
-                  sx={{ objectFit: 'contain' }}  // Ensures the image is contained within the box without overflow
+                  sx={{ objectFit: 'contain' }}
                 />
 
                 <CardContent sx={{ textAlign: 'center' }}>

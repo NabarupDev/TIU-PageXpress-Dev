@@ -6,7 +6,7 @@ const Template3 = ({ data, forceRender = false }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-    // Show warning message on mobile devices (unless forceRender is true for off-screen capture)
+
     if (isMobile && !forceRender) {
         return (
             <Box sx={{ textAlign: "center", marginTop: "20%", padding: "20px" }}>
@@ -17,22 +17,22 @@ const Template3 = ({ data, forceRender = false }) => {
         );
     }
 
-    const formData = data; // Ensure compatibility
+    const formData = data;
     const { institution, studentId, name, stream, semester, subject, section, group, year } = formData;
 
     return (
         <Box sx={{ width: "75%", height: "90%", margin: "auto", textAlign: "center", fontFamily: "Arial, sans-serif", paddingTop: "50px" }}>
-            {/* University Name */}
+            {}
             <Typography variant="h4" marginTop={"5%"} sx={{ fontWeight: "bold" }}>
                 {institution || "TECHNO INDIA UNIVERSITY"}
             </Typography>
 
-            {/* Location */}
+            {}
             <Typography variant="body2" sx={{ marginTop: "10px", marginBottom: "5%" }}>
                 EM 4, SECTOR V, SALT LAKE, KOLKATA - 700091, WEST BENGAL, INDIA
             </Typography>
 
-            {/* University Logo */}
+            {}
             <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <img
                     src={technoIndiaLogo}
@@ -41,12 +41,12 @@ const Template3 = ({ data, forceRender = false }) => {
                 />
             </Box>
 
-            {/* Subject Title */}
+            {}
             <Typography variant="h6" sx={{ fontWeight: "bold", marginBottom: "40%", marginTop: "30%" }}>
                 Subject: <span style={{ textDecoration: "underline" }}>{subject ? subject.toUpperCase() : ""}</span>
             </Typography>
 
-            {/* Student Details (Aligned Properly) */}
+            {}
             <Box sx={{ display: "flex", flexDirection: "column", alignItems: "left", textAlign: "left", width: "60%", margin: "auto" }}>
                 {renderDetail("STUDENT ID", studentId || "")}
                 {renderDetail("NAME", name || "")}
@@ -59,7 +59,7 @@ const Template3 = ({ data, forceRender = false }) => {
     );
 };
 
-// Function to render details in a structured format
+
 const renderDetail = (label, value) => (
     <Typography variant="body1" sx={{ marginBottom: "8px" }}>
         <strong>{label}:</strong> {value}

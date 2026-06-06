@@ -13,10 +13,20 @@ import {
   InputLabel,
   FormControl,
   Autocomplete,
+  ToggleButtonGroup,
+  ToggleButton,
+  IconButton,
+  Divider,
+  Stack,
 } from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
+import GroupsIcon from "@mui/icons-material/Groups";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 
 const FormPage = () => {
   const navigate = useNavigate();
+  const [projectType, setProjectType] = useState("individual");
   const [formData, setFormData] = useState({
     name: "",
     stream: "",
@@ -26,14 +36,25 @@ const FormPage = () => {
     semester: "",
     subject: "",
     institution: "Techno India University",
-    year: "", // Added year property
+    year: "",
+    topic: "",
   });
+  const [members, setMembers] = useState([
+    { name: "", studentId: "" },
+    { name: "", studentId: "" },
+  ]);
 
   useEffect(() => {
     const storedData = localStorage.getItem("projectData");
     if (storedData) {
       const parsedData = JSON.parse(storedData);
       setFormData((prev) => ({ ...prev, ...parsedData }));
+      if (parsedData.projectType) {
+        setProjectType(parsedData.projectType);
+      }
+      if (parsedData.members && Array.isArray(parsedData.members)) {
+        setMembers(parsedData.members);
+      }
     }
   }, []);
 
@@ -45,26 +66,69 @@ const FormPage = () => {
     }));
   };
 
+  const handleProjectTypeChange = (event, newType) => {
+    if (newType !== null) {
+      setProjectType(newType);
+    }
+  };
+
+  const handleMemberChange = (index, field, value) => {
+    setMembers((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  };
+
+  const addMember = () => {
+    setMembers((prev) => [...prev, { name: "", studentId: "" }]);
+  };
+
+  const removeMember = (index) => {
+    if (members.length <= 2) return;
+    setMembers((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const dataToStore = {
-      name: formData.name,
-      studentId: formData.studentId,
-      stream: formData.stream,
-      section: formData.section,
-      group: formData.group,
-      semester: formData.semester,
-      subject: formData.subject,
-      year: formData.year,
-    };
-    localStorage.setItem("projectData", JSON.stringify(dataToStore));
-    navigate("/templates");
+
+    if (projectType === "individual") {
+      const dataToStore = {
+        projectType: "individual",
+        name: formData.name,
+        studentId: formData.studentId,
+        stream: formData.stream,
+        section: formData.section,
+        group: formData.group,
+        semester: formData.semester,
+        subject: formData.subject,
+        year: formData.year,
+      };
+      localStorage.setItem("projectData", JSON.stringify(dataToStore));
+      navigate("/templates");
+    } else {
+      const dataToStore = {
+        projectType: "group",
+        stream: formData.stream,
+        section: formData.section,
+        group: formData.group,
+        semester: formData.semester,
+        subject: formData.subject,
+        year: formData.year,
+        topic: formData.topic,
+        members: members,
+      };
+      localStorage.setItem("projectData", JSON.stringify(dataToStore));
+
+      localStorage.setItem("selectedTemplate", "groupTemplate");
+      navigate("/frontpreview");
+    }
   };
 
   const semesterOptions = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"];
 
   const streamOptions = [
-    // B.Tech Programs
+
     "B.TECH BT",
     "B.TECH CE",
     "B.TECH CSE",
@@ -78,24 +142,24 @@ const FormPage = () => {
     "B.TECH AIML",
     "B.TECH IOT",
     "B.TECH CYBER SECURITY",
-    
-    // Architecture & Design
+
+
     "B.ARCH",
     "B.DES",
-    
-    // Pharmacy
+
+
     "B.PHARM",
     "D.PHARM",
     "M.PHARM",
-    
-    // Commerce & Management
+
+
     "B.COM",
     "B.COM HONOURS",
     "BBA",
     "MBA",
     "PGDM",
-    
-    // Arts & Humanities
+
+
     "B.A ENGLISH",
     "B.A PSYCHOLOGY",
     "B.A JOURNALISM",
@@ -103,8 +167,8 @@ const FormPage = () => {
     "BBA LLB",
     "LLB",
     "LLM",
-    
-    // Science Programs
+
+
     "B.SC BIOTECHNOLOGY",
     "B.SC DATA SCIENCE",
     "B.SC MICROBIOLOGY",
@@ -115,12 +179,12 @@ const FormPage = () => {
     "B.SC FOOD TECHNOLOGY",
     "B.SC AGRICULTURE",
     "B.SC ANIMATION & VFX",
-    
-    // Computer Applications
+
+
     "BCA",
     "MCA",
-    
-    // Postgraduate Programs
+
+
     "M.TECH CSE",
     "M.TECH ECE",
     "M.TECH ME",
@@ -128,22 +192,24 @@ const FormPage = () => {
     "M.SC BIOTECHNOLOGY",
     "M.SC MICROBIOLOGY",
     "M.SC DATA SCIENCE",
-    
-    // Diploma Programs
+
+
     "DIPLOMA CSE",
     "DIPLOMA ECE",
     "DIPLOMA ME",
     "DIPLOMA CE",
     "DIPLOMA EE",
-    
-    // Others
+
+
     "B.ED",
     "M.ED",
     "BJMC",
     "MJMC",
   ];
-  
+
   const yearOptions = ["1st", "2nd", "3rd", "4th", "5th"];
+
+  const isGroup = projectType === "group";
 
   return (
     <Container maxWidth="md">
@@ -181,32 +247,75 @@ const FormPage = () => {
             Fill in your project details to generate a professional front page
           </Typography>
 
+          {}
+          <Box display="flex" justifyContent="center" mb={3}>
+            <ToggleButtonGroup
+              value={projectType}
+              exclusive
+              onChange={handleProjectTypeChange}
+              aria-label="project type"
+              sx={{
+                "& .MuiToggleButton-root": {
+                  px: { xs: 2, md: 4 },
+                  py: 1,
+                  fontSize: { xs: "0.85rem", md: "1rem" },
+                  textTransform: "none",
+                  fontWeight: 500,
+                },
+                "& .Mui-selected": {
+                  backgroundColor: "#007bff !important",
+                  color: "#fff !important",
+                  "&:hover": {
+                    backgroundColor: "#0056b3 !important",
+                  },
+                },
+              }}
+            >
+              <ToggleButton value="individual" aria-label="individual project">
+                <PersonIcon sx={{ mr: 1, fontSize: "1.2rem" }} />
+                Individual Project
+              </ToggleButton>
+              <ToggleButton value="group" aria-label="group project">
+                <GroupsIcon sx={{ mr: 1, fontSize: "1.2rem" }} />
+                Group Project
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </Box>
+
           <form onSubmit={handleSubmit}>
             <Grid container spacing={3}>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <TextField
-                  fullWidth
-                  label="Full Name"
-                  name="name"
-                  placeholder="Nabarup Roy"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <TextField
-                  fullWidth
-                  label="Student ID"
-                  name="studentId"
-                  placeholder="EX- 241001011022"
-                  value={formData.studentId}
-                  onChange={handleChange}
-                  required
-                  variant="outlined"
-                />
-              </Grid>
+
+              {}
+              {!isGroup && (
+                <>
+                  <Grid size={{ xs: 12, md: 6 }}>
+                    <TextField
+                      fullWidth
+                      label="Full Name"
+                      name="name"
+                      placeholder="Nabarup Roy"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      variant="outlined"
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 12, md: 6 }}>
+                    <TextField
+                      fullWidth
+                      label="Student ID"
+                      name="studentId"
+                      placeholder="EX- 241001011022"
+                      value={formData.studentId}
+                      onChange={handleChange}
+                      required
+                      variant="outlined"
+                    />
+                  </Grid>
+                </>
+              )}
+
+              {}
               <Grid size={{ xs: 12, md: 6 }}>
                 <Autocomplete
                   fullWidth
@@ -297,7 +406,7 @@ const FormPage = () => {
                   variant="outlined"
                 />
               </Grid>
-              
+
               <Grid size={{ xs: 12, md: 6 }}>
                 <FormControl fullWidth variant="outlined">
                   <InputLabel>Year</InputLabel>
@@ -318,7 +427,119 @@ const FormPage = () => {
                 </FormControl>
               </Grid>
 
-              {/* Institution Name - Default & Non-Editable */}
+              {}
+              {isGroup && (
+                <>
+                  <Grid size={12}>
+                    <TextField
+                      fullWidth
+                      label="Topic"
+                      name="topic"
+                      placeholder="EX- Test cases for College Event Management System (CEMS)"
+                      value={formData.topic}
+                      onChange={handleChange}
+                      required
+                      variant="outlined"
+                    />
+                  </Grid>
+
+                  <Grid size={12}>
+                    <Divider sx={{ my: 1 }} />
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: 600,
+                        color: "#333",
+                        mt: 1,
+                        mb: 1,
+                        fontSize: { xs: "1rem", md: "1.25rem" },
+                      }}
+                    >
+                      Team Members
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      sx={{ mb: 2 }}
+                    >
+                      Add all group members (minimum 2)
+                    </Typography>
+
+                    <Stack spacing={2}>
+                      {members.map((member, index) => (
+                        <Box
+                          key={index}
+                          sx={{
+                            display: "flex",
+                            gap: 2,
+                            alignItems: "center",
+                          }}
+                        >
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              minWidth: "24px",
+                              fontWeight: 600,
+                              color: "#666",
+                            }}
+                          >
+                            {index + 1}.
+                          </Typography>
+                          <TextField
+                            fullWidth
+                            label={`Name`}
+                            placeholder="Full Name"
+                            value={member.name}
+                            onChange={(e) =>
+                              handleMemberChange(index, "name", e.target.value)
+                            }
+                            required
+                            variant="outlined"
+                            size="small"
+                          />
+                          <TextField
+                            fullWidth
+                            label={`Student ID`}
+                            placeholder="Student ID"
+                            value={member.studentId}
+                            onChange={(e) =>
+                              handleMemberChange(
+                                index,
+                                "studentId",
+                                e.target.value
+                              )
+                            }
+                            required
+                            variant="outlined"
+                            size="small"
+                          />
+                          <IconButton
+                            onClick={() => removeMember(index)}
+                            disabled={members.length <= 2}
+                            color="error"
+                            size="small"
+                            aria-label={`Remove member ${index + 1}`}
+                          >
+                            <RemoveCircleOutlineIcon />
+                          </IconButton>
+                        </Box>
+                      ))}
+                    </Stack>
+
+                    <Button
+                      variant="outlined"
+                      startIcon={<AddCircleOutlineIcon />}
+                      onClick={addMember}
+                      sx={{ mt: 2, textTransform: "none" }}
+                      size="small"
+                    >
+                      Add Member
+                    </Button>
+                  </Grid>
+                </>
+              )}
+
+              {}
               <Grid size={12}>
                 <TextField
                   fullWidth
@@ -351,7 +572,7 @@ const FormPage = () => {
                     "&:hover": { backgroundColor: "#0056b3" },
                   }}
                 >
-                  Next: Select Template
+                  {isGroup ? "Next: Preview" : "Next: Select Template"}
                 </Button>
               </Grid>
             </Grid>

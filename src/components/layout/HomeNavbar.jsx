@@ -5,14 +5,14 @@ import pagexpressLogo from "../../assets/pagexpress-logo.png";
 
 const HomeNavbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const isMobile = useMediaQuery("(max-width: 768px)"); // Check if screen width is less than 768px
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
     if (section) {
       section.scrollIntoView({ behavior: "smooth" });
     }
-    setMobileOpen(false); // Close drawer on mobile after clicking a link
+    setMobileOpen(false);
   };
 
   const menuItems = [
@@ -35,7 +35,6 @@ const HomeNavbar = () => {
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 
-        {/* Logo */}
         <Box>
           <img
             src={pagexpressLogo}
@@ -46,7 +45,6 @@ const HomeNavbar = () => {
           />
         </Box>
 
-        {/* Desktop Navigation */}
         {!isMobile ? (
           <Box sx={{ display: "flex", gap: "30px" }}>
             {menuItems.map((item) => (
@@ -58,7 +56,7 @@ const HomeNavbar = () => {
                   color: "black",
                   fontWeight: "500",
                   cursor: "pointer",
-                  fontSize: "1rem", // Adjust font size dynamically
+                  fontSize: "1rem",
                   "&:hover": { textDecoration: "underline" },
                 }}
               >
@@ -67,13 +65,12 @@ const HomeNavbar = () => {
             ))}
           </Box>
         ) : (
-          /* Mobile Menu Icon */
+
           <IconButton onClick={() => setMobileOpen(true)} color="black">
             <MenuIcon />
           </IconButton>
         )}
 
-        {/* Mobile Drawer */}
         <Drawer anchor="right" open={mobileOpen} onClose={() => setMobileOpen(false)}>
           <Box sx={{ width: 250 }}>
             <List>

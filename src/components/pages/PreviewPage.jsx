@@ -22,6 +22,7 @@ import jsPDF from 'jspdf';
 import Template1 from '../templates/Template1';
 import Template2 from '../templates/Template2';
 import Template3 from '../templates/Template3';
+import GroupTemplate from '../templates/GroupTemplate';
 
 const PreviewPage = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const PreviewPage = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [mobileScale, setMobileScale] = useState(0.4);
 
-  // Calculate scale for mobile preview based on container width
+
   const updateMobileScale = useCallback(() => {
     if (mobilePreviewWrapperRef.current) {
       const containerWidth = mobilePreviewWrapperRef.current.offsetWidth;
@@ -49,17 +50,25 @@ const PreviewPage = () => {
     return () => window.removeEventListener('resize', updateMobileScale);
   }, [isMobile, updateMobileScale]);
 
-  // Menu state
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const menuId = 'save-options-menu';
 
-  // API Ninjas Counter configuration
+
+  const getTimestamp = () => {
+    const now = new Date();
+    const date = now.toISOString().split('T')[0];
+    const time = now.toTimeString().split(' ')[0].replace(/:/g, '-');
+    return `${date}_${time}`;
+  };
+
+
   const API_NINJAS_KEY = import.meta.env.VITE_API_NINJAS_KEY;
   const API_NINJAS_BASE_URL = 'https://api.api-ninjas.com/v1/counter';
   const COUNTER_ID = import.meta.env.VITE_COUNTER_ID;
 
-  // Increment download count
+
   const incrementDownloadCount = async () => {
     try {
       await fetch(`${API_NINJAS_BASE_URL}?id=${COUNTER_ID}&hit=true`, {
@@ -69,22 +78,24 @@ const PreviewPage = () => {
         }
       });
     } catch (error) {
-      // Silently fail - don't block the download
-      // console.warn('Could not update download counter:', error.message);
+
     }
   };
 
-  if (!projectData.name || !selectedTemplate) {
-    navigate(!projectData.name ? '/' : '/templates');
+  const isGroupProject = projectData.projectType === 'group';
+
+
+  if ((!isGroupProject && !projectData.name) || !selectedTemplate) {
+    navigate((!isGroupProject && !projectData.name) ? '/' : '/templates');
     return null;
   }
 
-  // Open menu on click only (not hover)
+
   const handleOpenMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  // Close menu
+
   const handleCloseMenu = () => {
     setAnchorEl(null);
   };
@@ -102,11 +113,11 @@ const PreviewPage = () => {
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
       pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-      pdf.save('front_page.pdf');
-      // Increment download counter
+      pdf.save(`front_page_${getTimestamp()}.pdf`);
+
       await incrementDownloadCount();
     } catch (error) {
-      // console.error('Error generating PDF:', error);
+
       alert('Error generating PDF. Please try again.');
     } finally {
       setIsGenerating(false);
@@ -123,13 +134,12 @@ const PreviewPage = () => {
       const imageData = canvas.toDataURL(`image/${format}`);
       const link = document.createElement('a');
       link.href = imageData;
-      link.download = `front_page.${format}`;
+      link.download = `front_page_${getTimestamp()}.${format}`;
       link.click();
-      // Increment download counter
+
       await incrementDownloadCount();
     } catch (error) {
-      // console.error(`Error saving ${format}:`, error);
-      // alert(`Error saving as ${format}. Please try again.`);
+
     } finally {
       setIsGenerating(false);
     }
@@ -140,6 +150,7 @@ const PreviewPage = () => {
       case 'template1': return <Template1 data={projectData} forceRender />;
       case 'template2': return <Template2 data={projectData} forceRender />;
       case 'template3': return <Template3 data={projectData} forceRender />;
+      case 'groupTemplate': return <GroupTemplate data={projectData} forceRender />;
       default: return <Typography>No template selected</Typography>;
     }
   };
@@ -155,15 +166,11 @@ const PreviewPage = () => {
             Review and download your project front page.
           </Typography>
 
-          {/* 
-            On mobile: off-screen container at fixed A4 size for html2canvas capture,
-            plus a visible scaled-down preview the user can see.
-            On desktop: single visible preview that also serves as the capture target.
-          */}
+          {}
 
           {isMobile ? (
             <>
-              {/* Hidden off-screen render at full A4 size for accurate downloads */}
+              {}
               <Box 
                 ref={contentRef} 
                 sx={{
@@ -181,7 +188,7 @@ const PreviewPage = () => {
                 {renderTemplate()}
               </Box>
 
-              {/* Visible scaled-down preview for mobile */}
+              {}
               <Box 
                 ref={mobilePreviewWrapperRef}
                 sx={{ 
@@ -208,7 +215,7 @@ const PreviewPage = () => {
               </Box>
             </>
           ) : (
-            /* Desktop: visible inline preview, also used for capture */
+
             <Box 
               ref={contentRef} 
               sx={{ 
@@ -229,17 +236,17 @@ const PreviewPage = () => {
           )}
 
           <Stack spacing={2} direction="row" justifyContent="center" sx={{ flexWrap: 'wrap', gap: 1 }}>
-            {/* Back Button */}
+            {}
             <Button 
               variant="outlined" 
               color="secondary"  
-              onClick={() => navigate('/templates')}
+              onClick={() => navigate(isGroupProject ? '/frontpageform' : '/templates')}
               size={isMobile ? "small" : "medium"}
             >
-              Back to Templates
+              {isGroupProject ? 'Back to Form' : 'Back to Templates'}
             </Button>
 
-            {/* Save As Button with Dropdown */}
+            {}
             <Tooltip title="Click to see save options">
               <Button
                 variant="contained"

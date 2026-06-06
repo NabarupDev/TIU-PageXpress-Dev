@@ -38,9 +38,9 @@ const WhyUseThis = () => {
         py: { xs: 6, md: 10 },
       }}
     >
-      {/* Section Title */}
+      {}
       <Typography
-        variant={isSmallScreen ? "h5" : isMediumScreen ? "h4" : "h3"} // Adaptive text size
+        variant={isSmallScreen ? "h5" : isMediumScreen ? "h4" : "h3"}
         fontWeight="bold"
         gutterBottom
         sx={{
@@ -51,7 +51,7 @@ const WhyUseThis = () => {
         Why Use This?
       </Typography>
 
-      {/* Benefits Grid */}
+      {}
       <Grid container spacing={4} justifyContent="center" mt={4}>
         {benefits.map((benefit, index) => (
           <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
@@ -61,34 +61,34 @@ const WhyUseThis = () => {
                 p: { xs: 3, md: 4 },
                 borderRadius: "12px",
                 textAlign: "left",
-                height: "100%", // Make all boxes equal height
+                height: "100%",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
                 transition: "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
-                backgroundColor: index % 2 === 0 ? "#F9F9F9" : "white", // Alternating colors for better UI
+                backgroundColor: index % 2 === 0 ? "#F9F9F9" : "white",
                 "&:hover": {
                   cursor: "pointer",
                   transform: "translateY(-5px)",
                 },
               }}
             >
-              {/* Benefit Title */}
+              {}
               <Typography
-                variant={isSmallScreen ? "h6" : "h5"} // Responsive font size
+                variant={isSmallScreen ? "h6" : "h5"}
                 fontWeight="bold"
                 sx={{ color: theme.palette.primary.main }}
               >
                 {benefit.title}
               </Typography>
 
-              {/* Benefit Description */}
+              {}
               <Typography
                 variant="body1"
                 color="text.secondary"
                 sx={{
                   mt: 1,
-                  fontSize: isSmallScreen ? "0.9rem" : "1rem", // Scaling text
+                  fontSize: isSmallScreen ? "0.9rem" : "1rem",
                   lineHeight: "1.5",
                 }}
               >

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Paper, Typography, Box, Divider, Grid, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 
-// Classic Template
+
 export const ClassicTemplate = ({ formData = [] }) => {
 
   const totalRows = 10;
@@ -15,14 +15,14 @@ export const ClassicTemplate = ({ formData = [] }) => {
         backgroundColor: '#fff',
         border: '2px solid black',
         borderRadius: 2,
-        width: '210mm', // A4 Width
-        height: '297mm', // A4 Height
+        width: '210mm',
+        height: '297mm',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between'
       }}
     >
-      {/* Title */}
+      {}
       <Typography
         variant="h4"
         align="center"
@@ -30,14 +30,14 @@ export const ClassicTemplate = ({ formData = [] }) => {
           fontWeight: 'bold',
           textTransform: 'uppercase',
           mb: 3,
-          fontFamily: 'serif', // Classic Font Style
+          fontFamily: 'serif',
           letterSpacing: 1.5
         }}
       >
         PROJECT INDEX
       </Typography>
 
-      {/* Table */}
+      {}
       <TableContainer component={Paper} sx={{ flexGrow: 1, boxShadow: 'none' }}>
         <Table sx={{ minWidth: 650, borderCollapse: 'collapse', height: '100%' }} aria-label="classic project index table">
           <TableHead>
@@ -56,7 +56,7 @@ export const ClassicTemplate = ({ formData = [] }) => {
                 <TableCell sx={{ border: '2px solid black', textAlign: 'left', fontFamily: 'serif' }}>{row.assignmentDescription || ''}</TableCell>
                 <TableCell sx={{ border: '2px solid black', textAlign: 'center', fontFamily: 'serif' }}>{row.assignmentDate || ''}</TableCell>
                 <TableCell sx={{ border: '2px solid black', textAlign: 'center', fontFamily: 'serif' }}>{row.submissionDate || ''}</TableCell>
-                <TableCell sx={{ border: '2px solid black', textAlign: 'center' }}>{/* Empty space for signature */}</TableCell>
+                <TableCell sx={{ border: '2px solid black', textAlign: 'center' }}>{}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -66,7 +66,7 @@ export const ClassicTemplate = ({ formData = [] }) => {
   );
 };
 
-// Modern Template
+
 export const ModernTemplate = ({ formData = [] }) => {
 
   const totalRows = 10;
@@ -80,14 +80,14 @@ export const ModernTemplate = ({ formData = [] }) => {
         backgroundColor: '#fff',
         border: '1px solid #eaeaea',
         borderRadius: 2,
-        width: '210mm', // A4 Width
-        height: '297mm', // A4 Height
+        width: '210mm',
+        height: '297mm',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between'
       }}
     >
-      {/* Title */}
+      {}
       <Typography
         variant="h4"
         align="center"
@@ -96,7 +96,7 @@ export const ModernTemplate = ({ formData = [] }) => {
         INDEX
       </Typography>
 
-      {/* Table */}
+      {}
       <TableContainer component={Paper} sx={{ flexGrow: 1 }}>
         <Table sx={{ minWidth: 650, borderCollapse: 'collapse', height: '100%' }} aria-label="project index table">
           <TableHead>
@@ -115,7 +115,7 @@ export const ModernTemplate = ({ formData = [] }) => {
                 <TableCell sx={{ border: '1px solid black', textAlign: 'left' }}>{row.assignmentDescription || ''}</TableCell>
                 <TableCell sx={{ border: '1px solid black', textAlign: 'center' }}>{row.assignmentDate || ''}</TableCell>
                 <TableCell sx={{ border: '1px solid black', textAlign: 'center' }}>{row.submissionDate || ''}</TableCell>
-                <TableCell sx={{ border: '1px solid black', textAlign: 'center' }}>{/* Empty space for signature */}</TableCell>
+                <TableCell sx={{ border: '1px solid black', textAlign: 'center' }}>{}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -125,7 +125,7 @@ export const ModernTemplate = ({ formData = [] }) => {
   );
 };
 
-// Minimalist Template
+
 export const MinimalistTemplate = ({ formData = [] }) => {
 
   const totalRows = 10;
@@ -137,15 +137,15 @@ export const MinimalistTemplate = ({ formData = [] }) => {
       sx={{
         p: 5,
         backgroundColor: '#fff',
-        width: '210mm', // A4 Width
-        height: '297mm', // A4 Height
+        width: '210mm',
+        height: '297mm',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
         fontFamily: 'Arial, sans-serif'
       }}
     >
-      {/* Title */}
+      {}
       <Typography
         variant="h4"
         align="center"
@@ -159,7 +159,7 @@ export const MinimalistTemplate = ({ formData = [] }) => {
         Index
       </Typography>
 
-      {/* Table */}
+      {}
       <TableContainer component={Paper} sx={{ flexGrow: 1, boxShadow: 'none' }}>
         <Table sx={{ minWidth: 650, borderCollapse: 'collapse', height: '100%' }} aria-label="minimalist project index table">
           <TableHead>
@@ -169,7 +169,7 @@ export const MinimalistTemplate = ({ formData = [] }) => {
                   fontWeight: '500',
                   textAlign: 'center',
                   width: '10%',
-                  border: '1px solid #ccc', // Column Border
+                  border: '1px solid #ccc',
                 }}
               >
                 Sl No.
@@ -179,7 +179,7 @@ export const MinimalistTemplate = ({ formData = [] }) => {
                   fontWeight: '500',
                   textAlign: 'center',
                   width: '40%',
-                  border: '1px solid #ccc', // Column Border
+                  border: '1px solid #ccc',
                 }}
               >
                 Assignment Description
@@ -189,7 +189,7 @@ export const MinimalistTemplate = ({ formData = [] }) => {
                   fontWeight: '500',
                   textAlign: 'center',
                   width: '15%',
-                  border: '1px solid #ccc', // Column Border
+                  border: '1px solid #ccc',
                 }}
               >
                 Assignment Date
@@ -199,7 +199,7 @@ export const MinimalistTemplate = ({ formData = [] }) => {
                   fontWeight: '500',
                   textAlign: 'center',
                   width: '15%',
-                  border: '1px solid #ccc', // Column Border
+                  border: '1px solid #ccc',
                 }}
               >
                 Submission Date
@@ -209,7 +209,7 @@ export const MinimalistTemplate = ({ formData = [] }) => {
                   fontWeight: '500',
                   textAlign: 'center',
                   width: '20%',
-                  border: '1px solid #ccc', // Column Border
+                  border: '1px solid #ccc',
                 }}
               >
                 Signature
@@ -222,7 +222,7 @@ export const MinimalistTemplate = ({ formData = [] }) => {
                 <TableCell
                   sx={{
                     textAlign: 'center',
-                    border: '1px solid #ccc', // Column Border
+                    border: '1px solid #ccc',
                   }}
                 >
                   {row.assignmentDescription ? index + 1 : ''}
@@ -230,7 +230,7 @@ export const MinimalistTemplate = ({ formData = [] }) => {
                 <TableCell
                   sx={{
                     textAlign: 'left',
-                    border: '1px solid #ccc', // Column Border
+                    border: '1px solid #ccc',
                   }}
                 >
                   {row.assignmentDescription || ''}
@@ -238,7 +238,7 @@ export const MinimalistTemplate = ({ formData = [] }) => {
                 <TableCell
                   sx={{
                     textAlign: 'center',
-                    border: '1px solid #ccc', // Column Border
+                    border: '1px solid #ccc',
                   }}
                 >
                   {row.assignmentDate || ''}
@@ -246,7 +246,7 @@ export const MinimalistTemplate = ({ formData = [] }) => {
                 <TableCell
                   sx={{
                     textAlign: 'center',
-                    border: '1px solid #ccc', // Column Border
+                    border: '1px solid #ccc',
                   }}
                 >
                   {row.submissionDate || ''}
@@ -254,10 +254,10 @@ export const MinimalistTemplate = ({ formData = [] }) => {
                 <TableCell
                   sx={{
                     textAlign: 'center',
-                    border: '1px solid #ccc', // Column Border
+                    border: '1px solid #ccc',
                   }}
                 >
-                  {/* Empty space for signature */}
+                  {}
                 </TableCell>
               </TableRow>
             ))}

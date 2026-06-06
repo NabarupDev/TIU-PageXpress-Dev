@@ -15,15 +15,15 @@ const Footer = () => {
 
   const contactEmail = import.meta.env.VITE_CONTACT_EMAIL || "nabaruproy.dev@gmail.com";
 
-  // State for download count
+
   const [downloadCount, setDownloadCount] = useState(null);
 
-  // API Ninjas Counter configuration
+
   const API_NINJAS_KEY = import.meta.env.VITE_API_NINJAS_KEY;
   const API_NINJAS_BASE_URL = 'https://api.api-ninjas.com/v1/counter';
   const COUNTER_ID = import.meta.env.VITE_COUNTER_ID;
 
-  // Format number to compact notation (1k, 1.5k, 1M, etc.)
+
   const formatCompactNumber = (num) => {
     if (num < 1000) return num.toString();
     if (num < 1000000) {
@@ -38,27 +38,27 @@ const Footer = () => {
     return formatted % 1 === 0 ? `${formatted}B` : `${formatted.toFixed(1)}B`;
   };
 
-  // Fetch download count on component mount
+
   useEffect(() => {
     const CACHE_KEY = 'download_count_cache';
-    const CACHE_DURATION = 3 * 60 * 60 * 1000; // 3 hours in milliseconds
+    const CACHE_DURATION = 3 * 60 * 60 * 1000;
 
     const fetchDownloadCount = async () => {
       try {
-        // Check if cached data exists and is still valid
+
         const cachedData = localStorage.getItem(CACHE_KEY);
         if (cachedData) {
           const { value, timestamp } = JSON.parse(cachedData);
           const now = Date.now();
           
-          // If cache is still valid (less than 3 hours old)
+
           if (now - timestamp < CACHE_DURATION) {
             setDownloadCount(value);
             return;
           }
         }
 
-        // Fetch fresh data from API
+
         const response = await fetch(`${API_NINJAS_BASE_URL}?id=${COUNTER_ID}`, {
           method: 'GET',
           headers: {
@@ -71,14 +71,14 @@ const Footer = () => {
           const downloadValue = data.value || 0;
           setDownloadCount(downloadValue);
           
-          // Store in local storage with timestamp
+
           localStorage.setItem(CACHE_KEY, JSON.stringify({
             value: downloadValue,
             timestamp: Date.now()
           }));
         }
       } catch (error) {
-        // console.warn('Download counter unavailable:', error.message);
+
       }
     };
     fetchDownloadCount();
@@ -92,7 +92,7 @@ const Footer = () => {
     >
       <Container maxWidth="lg">
         <Grid container justifyContent="space-between" alignItems="center" spacing={2}>
-          {/* Logo Section */}
+          {}
           <Grid size={{ xs: 12, sm: "auto" }}>
             <img
               src={pagexpressLogo}
@@ -103,7 +103,7 @@ const Footer = () => {
             />
           </Grid>
 
-          {/* Navigation Links */}
+          {}
           <Grid size={{ xs: 12, sm: "auto" }}>
             <Grid container spacing={3} justifyContent="center" alignItems="center">
               {[
@@ -115,7 +115,7 @@ const Footer = () => {
               ].map((item, index) => (
                 <Grid key={index}>
                   <Link
-                    component="button"  // Use button instead of href
+                    component="button"
                     onClick={() => scrollToSection(item.id)}
                     underline="hover"
                     sx={{
@@ -137,7 +137,7 @@ const Footer = () => {
           </Grid>
         </Grid>
 
-        {/* Divider Line */}
+        {}
         <Box sx={{ borderBottom: "1px solid #ddd", my: 2 }} />
 
         {/* Download Counter Display */}
@@ -164,7 +164,7 @@ const Footer = () => {
           </Box>
         )}
 
-        {/* Copyright Text */}
+        {}
         <Typography
           variant="body2"
           color="gray"
@@ -176,7 +176,7 @@ const Footer = () => {
           TIU PageXpress - Created by Nabarup Roy
         </Typography>
 
-        {/* Contact Email */}
+        {}
         <Typography
           variant="body2"
           color="gray"

@@ -19,7 +19,7 @@ const Footer = () => {
             sx={{ backgroundColor: "#F5F7FA", py: 4, mt: 4 }}
         >
             <Container maxWidth="lg">
-                {/* Copyright Text */}
+                {}
                 <Typography
                     variant="body2"
                     color="gray"
@@ -31,7 +31,7 @@ const Footer = () => {
                     TIU PageXpress - Created by Nabarup Roy
                 </Typography>
 
-                {/* Contact Email */}
+                {}
                 <Typography
                     variant="body2"
                     color="gray"

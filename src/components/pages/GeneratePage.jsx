@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const GeneratePage = () => {
   const navigate = useNavigate();
 
-  // Responsive checks
+
   const isSmallScreen = useMediaQuery("(max-width: 600px)");
   const isMediumScreen = useMediaQuery("(max-width: 900px)");
 
@@ -17,7 +17,7 @@ const GeneratePage = () => {
         py: { xs: 6, md: 10 },
       }}
     >
-      {/* Title */}
+      {}
       <Typography
         variant={isSmallScreen ? "h5" : isMediumScreen ? "h4" : "h3"}
         fontWeight="bold"
@@ -27,7 +27,7 @@ const GeneratePage = () => {
         Generate Your Front & Index Page
       </Typography>
 
-      {/* Subtitle */}
+      {}
       <Typography
         variant="body1"
         sx={{
@@ -41,7 +41,7 @@ const GeneratePage = () => {
         Choose the document type you need to generate.
       </Typography>
 
-      {/* Buttons Container */}
+      {}
       <Box
         sx={{
           display: "flex",
@@ -51,7 +51,7 @@ const GeneratePage = () => {
           mb: 3,
         }}
       >
-        {/* Generate Front Page Button */}
+        {}
         <Button
           variant="outlined"
           sx={{
@@ -70,7 +70,7 @@ const GeneratePage = () => {
           Generate Front Page
         </Button>
 
-        {/* Generate Index Page Button */}
+        {}
         <Button
           variant="contained"
           sx={{
@@ -89,7 +89,7 @@ const GeneratePage = () => {
         </Button>
       </Box>
 
-      {/* Descriptions Below Buttons */}
+      {}
       <Box
         sx={{
           display: "flex",
@@ -98,7 +98,7 @@ const GeneratePage = () => {
           flexWrap: "wrap",
         }}
       >
-        {/* Front Page Description */}
+        {}
         <Box sx={{ maxWidth: 240, textAlign: "center" }}>
           <Typography
             variant="body2"
@@ -109,7 +109,7 @@ const GeneratePage = () => {
           </Typography>
         </Box>
 
-        {/* Index Page Description */}
+        {}
         <Box sx={{ maxWidth: 240, textAlign: "center" }}>
           <Typography
             variant="body2"

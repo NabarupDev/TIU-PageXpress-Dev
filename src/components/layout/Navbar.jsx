@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { AppBar, Toolbar, Button, Box, IconButton, Drawer } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import MenuIcon from '@mui/icons-material/Menu'; // Import Menu Icon
+import MenuIcon from '@mui/icons-material/Menu';
 import pagexpressLogo from "../../assets/pagexpress-logo.png";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  // Toggle Drawer
+
   const toggleDrawer = () => {
     setOpenDrawer(!openDrawer);
   };
 
-  // Drawer menu items
+
   const menuItems = (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2, p: 3 }}>
       <Button
@@ -40,7 +40,7 @@ const Navbar = () => {
   return (
     <AppBar position="sticky" sx={{ bgcolor: "white", boxShadow: 1, px: 3 }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        {/* Logo */}
+        {}
         <Box
           component="img"
           src={pagexpressLogo}
@@ -53,15 +53,15 @@ const Navbar = () => {
         <IconButton
           edge="start"
           sx={{
-            display: { xs: 'block', md: 'none' },  // Show only on mobile
-            color: 'black'  // Set the icon color to black
+            display: { xs: 'block', md: 'none' },
+            color: 'black'
           }}
           onClick={toggleDrawer}
         >
           <MenuIcon sx={{ color: 'black' }} />  {/* Set the MenuIcon color to black */}
         </IconButton>
 
-        {/* Navigation Links for Desktop */}
+        {}
         <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3 }}>
           <Button
             onClick={() => navigate("/")}
@@ -101,7 +101,7 @@ const Navbar = () => {
         </Box>
       </Toolbar>
 
-      {/* Drawer for Mobile */}
+      {}
       <Drawer
         anchor="left"
         open={openDrawer}
