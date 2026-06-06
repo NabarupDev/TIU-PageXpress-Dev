@@ -2,12 +2,12 @@ import React from "react";
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import technoIndiaLogo from "../../assets/techno-india-logo.png";
 
-const Template3 = ({ data }) => {
+const Template3 = ({ data, forceRender = false }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-    // Show warning message on mobile devices
-    if (isMobile) {
+    // Show warning message on mobile devices (unless forceRender is true for off-screen capture)
+    if (isMobile && !forceRender) {
         return (
             <Box sx={{ textAlign: "center", marginTop: "20%", padding: "20px" }}>
                 <Typography variant="h6" color="error">
@@ -50,7 +50,7 @@ const Template3 = ({ data }) => {
             <Box sx={{ display: "flex", flexDirection: "column", alignItems: "left", textAlign: "left", width: "60%", margin: "auto" }}>
                 {renderDetail("STUDENT ID", studentId || "")}
                 {renderDetail("NAME", name || "")}
-                {renderDetail("DEPARTMENT", section ? `${section.toUpperCase()} (GROUP - ${group.toUpperCase()})` : stream || "")}
+                {(section || group) && renderDetail("DEPARTMENT", `${section ? section.toUpperCase() : ''}${section && group ? ` (GROUP - ${group.toUpperCase()})` : group ? `GROUP - ${group.toUpperCase()}` : ''}`)}
                 {renderDetail("SEMESTER", semester ? semester.toUpperCase() + " SEMESTER" : "")}
                 {renderDetail("STREAM", stream || "")}
                 {renderDetail("YEAR", year || "")}

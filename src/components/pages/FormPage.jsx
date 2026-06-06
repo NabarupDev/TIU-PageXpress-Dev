@@ -210,6 +210,7 @@ const FormPage = () => {
               <Grid size={{ xs: 12, md: 6 }}>
                 <Autocomplete
                   fullWidth
+                  freeSolo
                   options={streamOptions}
                   value={formData.stream}
                   onChange={(event, newValue) => {
@@ -218,11 +219,19 @@ const FormPage = () => {
                       stream: newValue || "",
                     }));
                   }}
+                  onInputChange={(event, newInputValue, reason) => {
+                    if (reason === 'input') {
+                      setFormData((prevState) => ({
+                        ...prevState,
+                        stream: newInputValue,
+                      }));
+                    }
+                  }}
                   renderInput={(params) => (
                     <TextField
                       {...params}
                       label="Stream"
-                      placeholder="Search or select stream"
+                      placeholder="Search, select, or type your own"
                       variant="outlined"
                       required
                     />
@@ -238,24 +247,22 @@ const FormPage = () => {
               <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   fullWidth
-                  label="Section"
+                  label="Section (Optional)"
                   name="section"
                   placeholder="EX- BCS2E"
                   value={formData.section}
                   onChange={handleChange}
-                  required
                   variant="outlined"
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   fullWidth
-                  label="Group"
+                  label="Group (Optional)"
                   name="group"
                   placeholder="EX- B"
                   value={formData.group}
                   onChange={handleChange}
-                  required
                   variant="outlined"
                 />
               </Grid>

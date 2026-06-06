@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Container, 
@@ -10,9 +10,12 @@ import {
   Stack,
   Menu,
   MenuItem,
-  Tooltip
+  Tooltip,
+  useMediaQuery,
+  useTheme
 } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import DownloadIcon from '@mui/icons-material/Download';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
@@ -22,10 +25,29 @@ import Template3 from '../templates/Template3';
 
 const PreviewPage = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const projectData = JSON.parse(localStorage.getItem('projectData') || '{}');
   const selectedTemplate = localStorage.getItem('selectedTemplate');
   const contentRef = useRef(null);
+  const mobilePreviewWrapperRef = useRef(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [mobileScale, setMobileScale] = useState(0.4);
+
+  // Calculate scale for mobile preview based on container width
+  const updateMobileScale = useCallback(() => {
+    if (mobilePreviewWrapperRef.current) {
+      const containerWidth = mobilePreviewWrapperRef.current.offsetWidth;
+      setMobileScale(containerWidth / 794);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    updateMobileScale();
+    window.addEventListener('resize', updateMobileScale);
+    return () => window.removeEventListener('resize', updateMobileScale);
+  }, [isMobile, updateMobileScale]);
 
   // Menu state
   const [anchorEl, setAnchorEl] = useState(null);
@@ -115,9 +137,9 @@ const PreviewPage = () => {
 
   const renderTemplate = () => {
     switch (selectedTemplate) {
-      case 'template1': return <Template1 data={projectData} />;
-      case 'template2': return <Template2 data={projectData} />;
-      case 'template3': return <Template3 data={projectData} />;
+      case 'template1': return <Template1 data={projectData} forceRender />;
+      case 'template2': return <Template2 data={projectData} forceRender />;
+      case 'template3': return <Template3 data={projectData} forceRender />;
       default: return <Typography>No template selected</Typography>;
     }
   };
@@ -125,38 +147,94 @@ const PreviewPage = () => {
   return (
     <Container maxWidth="md">
       <Box my={4}>
-        <Paper elevation={4} sx={{ p: 4, borderRadius: 2 }}>
-          <Typography variant="h4" align="center" gutterBottom>
+        <Paper elevation={4} sx={{ p: { xs: 2, sm: 4 }, borderRadius: 2 }}>
+          <Typography variant={isMobile ? "h5" : "h4"} align="center" gutterBottom>
             Preview Your Front Page
           </Typography>
           <Typography variant="subtitle1" align="center" color="textSecondary" paragraph>
             Review and download your project front page.
           </Typography>
 
-          <Box 
-            ref={contentRef} 
-            sx={{ 
-              my: 4, 
-              p: 4, 
-              border: '1px solid #ddd', 
-              borderRadius: 2, 
-              backgroundColor: '#fff',
-              width: '100%',
-              aspectRatio: '1/1.414', 
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            {renderTemplate()}
-          </Box>
+          {/* 
+            On mobile: off-screen container at fixed A4 size for html2canvas capture,
+            plus a visible scaled-down preview the user can see.
+            On desktop: single visible preview that also serves as the capture target.
+          */}
 
-          <Stack spacing={2} direction="row" justifyContent="center">
+          {isMobile ? (
+            <>
+              {/* Hidden off-screen render at full A4 size for accurate downloads */}
+              <Box 
+                ref={contentRef} 
+                sx={{
+                  position: 'fixed',
+                  left: '-9999px',
+                  top: 0,
+                  width: '794px',
+                  height: '1123px',
+                  padding: '32px',
+                  backgroundColor: '#fff',
+                  zIndex: -1,
+                  overflow: 'hidden',
+                }}
+              >
+                {renderTemplate()}
+              </Box>
+
+              {/* Visible scaled-down preview for mobile */}
+              <Box 
+                ref={mobilePreviewWrapperRef}
+                sx={{ 
+                  my: 3, 
+                  border: '1px solid #ddd', 
+                  borderRadius: 2, 
+                  overflow: 'hidden',
+                  backgroundColor: '#fff',
+                  width: '100%',
+                  aspectRatio: '1/1.414',
+                }}
+              >
+                <Box
+                  sx={{
+                    width: '794px',
+                    height: '1123px',
+                    transform: `scale(${mobileScale})`,
+                    transformOrigin: 'top left',
+                    padding: '32px',
+                  }}
+                >
+                  {renderTemplate()}
+                </Box>
+              </Box>
+            </>
+          ) : (
+            /* Desktop: visible inline preview, also used for capture */
+            <Box 
+              ref={contentRef} 
+              sx={{ 
+                my: 4, 
+                p: 4, 
+                border: '1px solid #ddd', 
+                borderRadius: 2, 
+                backgroundColor: '#fff',
+                width: '100%',
+                aspectRatio: '1/1.414', 
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {renderTemplate()}
+            </Box>
+          )}
+
+          <Stack spacing={2} direction="row" justifyContent="center" sx={{ flexWrap: 'wrap', gap: 1 }}>
             {/* Back Button */}
             <Button 
               variant="outlined" 
               color="secondary"  
               onClick={() => navigate('/templates')}
+              size={isMobile ? "small" : "medium"}
             >
               Back to Templates
             </Button>
@@ -169,9 +247,11 @@ const PreviewPage = () => {
                 onClick={handleOpenMenu}
                 disabled={isGenerating}
                 endIcon={<ArrowDropDownIcon />}
+                startIcon={isMobile ? <DownloadIcon /> : undefined}
                 aria-controls={open ? menuId : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
+                size={isMobile ? "small" : "medium"}
               >
                 {isGenerating ? <CircularProgress size={20} /> : 'Save As'}
               </Button>

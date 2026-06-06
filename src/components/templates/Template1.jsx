@@ -2,12 +2,12 @@ import React from "react";
 import { Box, Typography, Grid, Table, TableBody, TableCell, TableRow, useMediaQuery, useTheme } from "@mui/material";
 import technoIndiaLogo from "../../assets/techno-india-logo.png";
 
-const Template1 = ({ data }) => {
+const Template1 = ({ data, forceRender = false }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  // Show warning message on mobile devices
-  if (isMobile) {
+  // Show warning message on mobile devices (unless forceRender is true for off-screen capture)
+  if (isMobile && !forceRender) {
     return (
       <Box sx={{ textAlign: "center", marginTop: "20%", padding: "20px" }}>
         <Typography variant="h6" color="error">
@@ -61,7 +61,7 @@ const Template1 = ({ data }) => {
         <TableBody>
           {renderRow("STUDENT ID", formData.studentId || "")}
           {renderRow("NAME", formData.name || "")}
-          {renderRow("DEPARTMENT", section ? `${section.toUpperCase()} (GROUP - ${group.toUpperCase()})` : stream || "")}
+          {(section || group) && renderRow("DEPARTMENT", `${section ? section.toUpperCase() : ''}${section && group ? ` (GROUP - ${group.toUpperCase()})` : group ? `GROUP - ${group.toUpperCase()}` : ''}`)}
           {renderRow("SEMESTER", formData.semester ? formData.semester.toUpperCase() + " SEMESTER" : "")}
           {renderRow("STREAM", formData.stream || "")}
           {renderRow("YEAR", formData.year || "")}
